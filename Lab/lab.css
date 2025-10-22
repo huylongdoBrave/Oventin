@@ -16,7 +16,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background: radial-gradient(circle, #dbbe7a 0%, #d19439 80%, #eb7e02 100%);
+background: radial-gradient(circle, #dbbe7a 0%, #d19439 80%, #eb7e02 100%);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -175,99 +175,7 @@ main {
     transition: 5s;
 }
 
-.wapper div{
-    height: 50%;
-    width: 200%;
-    position: absolute;
-    clip-path: polygon(100% 0, 50% 100%, 0 0);
-    transform: translate(-50%);
-    transform-origin: bottom;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: sans-serif;
-    color: whitesmoke;
-    left: 135px;
-}
-
-.wapper .frag_1{
-    background-color: red;
-    left: 50%;
-}
-
-.wapper .frag_2{
-    background-color: white;
-    transform: rotate(45deg);
-}
-
-.wapper .frag_3{
-    background-color: red;
-    transform: rotate(90deg);
-}
-
-.wapper .frag_4{
-    background-color: white;
-    transform: rotate(135deg);
-}
-
-.wapper .frag_5{
-    background-color: red;
-    transform: rotate(180deg);
-}
-
-.wapper .frag_6{
-    background-color: white;
-    transform: rotate(225deg);
-}
-
-.wapper .frag_7{
-    background-color: red;
-    transform: rotate(270deg);
-}
-
-.wapper .frag_8{
-    background-color: white;
-    transform: rotate(315deg);
-}
-
-.arrow{
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgb(228, 228, 228);
-}
-
-.arrow::before{
-    content: "\1f817";
-    font-size: 20px;
-}
-
-#spin{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 99;
-    background-color: #c2c2c2;
-    text-transform: uppercase;
-    border: solid 8px #8d8b8b;
-    font-weight: bold;
-    font-size: 20px;
-    color: #b4a2a28f;
-    width: 80px;
-    height: 80px;
-    font-family: sans-serif;
-    border-radius: 50%;
-    cursor: pointer;
-    outline: none;
-    letter-spacing: 1px;
-}
-
-/* .arrow-yellow{
+.arrow-yellow{
     width: 0px;
     height: 0px;
     border-left: 16px solid transparent;
@@ -279,7 +187,7 @@ main {
     transform: translateX(-50%);
     filter: drop-shadow(rgb(221, 221, 221) 0px 10px 0px);
     z-index: 5;
-} */
+}
 
 
 /* footer */
