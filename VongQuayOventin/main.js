@@ -15,8 +15,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         isSpinning = true;
 
-        // 1. Chọn một ô ngẫu nhiên để trúng thưởng
-        const winningSliceIndex = Math.floor(Math.random() * sliceCount);
+        // 1. Chọn một ô ngẫu nhiên để trúng thưởng THEO TỈ LỆ
+        //  const winningSliceIndex = Math.floor(Math.random() * sliceCount);
+        // Tỉ lệ:
+        // - ID 1, 3, 5, 7 (index 0, 2, 4, 6): 0.01%
+        // - ID 4, 8 (index 3, 7): 35%
+        // - ID 2, 6 (index 1, 5): 14.98%
+        const prizeProbabilities = [
+            0.0001, // 0: ID 1
+            0.1498, // 1: ID 2
+            0.0001, // 2: ID 3
+            0.35,   // 3: ID 4
+            0.0001, // 4: ID 5
+            0.1498, // 5: ID 6
+            0.0001, // 6: ID 7
+            0.35,   // 7: ID 8
+        ];
+
+        function getWeightedRandomIndex() {
+            let rand = Math.random(); // Số ngẫu nhiên từ 0.0 đến 1.0
+            for (let i = 0; i < prizeProbabilities.length; i++) {
+                if (rand < prizeProbabilities[i]) {
+                    return i;
+                }
+                rand -= prizeProbabilities[i];
+            }
+            // Fallback trong trường hợp có lỗi làm tròn số
+            return prizeProbabilities.length - 1;
+        }
+
+        const winningSliceIndex = getWeightedRandomIndex();
 
         // 2. Tính toán góc quay
         // Thêm số vòng quay ngẫu nhiên (ví dụ: 5 đến 10 vòng) để tạo hiệu ứng
