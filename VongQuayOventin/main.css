@@ -162,91 +162,194 @@ main {
     justify-content: center;
     height: 80vh;
     overflow: hidden;
+    flex-direction: column  ;
 }
+
+.title-down{
+    font-size: 20px;
+    font-weight: bold;
+    color: #eeeeee;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.container-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:20px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 0;
+}
+
+.wheel-wrapper {
+    width: 500px;
+    height: 500px;
+    background-color: #002d6f; 
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 0, 0, 0.3);
+    border: 5px solid #004a8d;
+}
+
 .container-wheel{
-	height: 350px;
-	width: 350px;
-	background: #4ed4c6;
+	height: 450px;
+	width: 450px;
+	background: #001aff;
 	position: relative;
 	border-radius: 50%;
 	overflow: hidden;
 	box-shadow: 0 0 10px gray;
 	transition: 3s all;
 }
-.container-wheel div{
+
+.container-wheel-part{
 	height: 50%;
-	width: 200px;
-	clip-path: polygon(100% 0,50% 100%, 0 0);
+	width: 190px;
+	clip-path: polygon(100% 0, 50% 100%, 0 0);
 	transform: translateX(-50%);
 	transform-origin: bottom;
 	position: absolute;
-	left: 21%;
+	left: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 20px;
 	font-family: monospace;
 	font-weight: 1000;
-	color:#008276; 
-	 writing-mode: vertical-rl;
+	color:red; 
+    
 }
+.image-wheel{
+    width: 70px;
+    height: 70px;
+    margin-top: -130px; /* Đẩy nội dung vào sâu hơn trong ô */
+    align-items: center;
+}
+.p-wheel{
+    margin-top: -130px; /* Đẩy nội dung vào sâu hơn trong ô */
+    margin-right: 0;
+    font-size: 13px;
+    align-items: center;
+    text-align: center;
+    max-width: 80px; 
+}
+/* Căn chỉnh lại góc quay của các ô để mũi tên chỉ vào giữa */
 .container-wheel .one{
-	background: #baf4ee;
-	left: 50%;
+	background: #ef0012;
+	transform: translateX(-50%) rotate(-22.5deg);
 }
 .container-wheel .two{
-	background: #4ed4c6;
-	transform: rotate(60deg);
+	background: white;
+	transform: translateX(-50%) rotate(22.5deg);
 }
 .container-wheel .three{
-	background: #baf4ee;
-	transform: rotate(120deg);
+	background: #ef0012;
+	transform: translateX(-50%) rotate(67.5deg); 
 }
 .container-wheel .four{
-	background: #4ed4c6;
-	transform: rotate(180deg);
+	background: white;
+	transform: translateX(-50%) rotate(112.5deg); 
 }
 .container-wheel .five{
-	background: #baf4ee;
-	transform: rotate(240deg);
+	background: #ef0012;
+	transform: translateX(-50%) rotate(157.5deg); 
 }
 .container-wheel .six{
-	background: #4ed4c6;
-	transform: rotate(300deg);
+	background: white;
+	transform: translateX(-50%) rotate(202.5deg); 
 }
+.container-wheel .seven{
+	background: #ef0012;
+	transform: translateX(-50%) rotate(247.5deg); 
+}
+.container-wheel .eight{
+	background:white;
+	transform: translateX(-50%) rotate(292.5deg); 
+}
+
 .mid{
 	height: 25px;
 	width: 25px;
 	border-radius: 50%;
 	position: absolute;
-	background: #008276;
+	background: #e4ba00;
 }
 #spin{
-	height: 60px;
-	width: 200px;
-	background: #4ed4c6;
+	height: 70px;
+	width: 70px;
+	background: #ef0012;
 	position: absolute;
-	margin-top: 600px;
-	font-size: 30px;
+	font-size: 22px;
 	color: white;
 	font-weight: 1000;
-	letter-spacing: 4px;
+	letter-spacing: 1px;
 	border: 1px solid white;
 	cursor: pointer;
 	box-shadow: 0 5px 10px gray;
 	transition: 0.2s all;
+	border-radius: 50%;
+	z-index: 10; 
 }
 #spin:hover{
 	box-shadow: none;
 }
-.stoper{
-	height: 50px;
+.arrow-top{
+	/* Mũi tên chính màu vàng */
+	height: 60px;
 	width: 40px;
-	background: #ffd600;
+    background: #ffd600; /* Màu vàng */
 	position: absolute;
-	clip-path: polygon(100% 0,50% 100%, 0 0);
-	margin-top: -350px;
+	clip-path: polygon(50% 100%, 0 0, 100% 0); /* Hình tam giác trỏ xuống */
+	top: -15px; /* Đẩy lên trên vòng quay một chút */
+    z-index: 20;
 }
+.arrow-bottom{
+	/* Phần bóng/viền màu xám phía sau */
+	height: 65px; /* Lớn hơn mũi tên chính một chút */
+	width: 44px;
+	background: #acacac; /* Màu xám */
+	position: absolute;
+	clip-path: polygon(50% 100%, 0 0, 100% 0);
+	top: -15px;
+    z-index: 19; /* Nằm ngay sau mũi tên chính */
+}
+
+
+/* Lights around the wheel */
+
+.light {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    margin-bottom: 10px;
+    background-color: #ffdd00;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.6); /* Viền trắng mờ */
+    transform-origin: 0 0;
+}
+
+/* Position each light */
+.light:nth-child(1) { transform: rotate(0deg) translateY(-240px); }
+.light:nth-child(2) { transform: rotate(30deg) translateY(-240px); }
+.light:nth-child(3) { transform: rotate(60deg) translateY(-240px); }
+.light:nth-child(4) { transform: rotate(90deg) translateY(-240px); }
+.light:nth-child(5) { transform: rotate(120deg) translateY(-240px); }
+.light:nth-child(6) { transform: rotate(150deg) translateY(-240px); }
+.light:nth-child(7) { transform: rotate(180deg) translateY(-240px); }
+.light:nth-child(8) { transform: rotate(210deg) translateY(-240px); }
+.light:nth-child(9) { transform: rotate(240deg) translateY(-240px); }
+.light:nth-child(10) { transform: rotate(270deg) translateY(-240px); }
+.light:nth-child(11) { transform: rotate(300deg) translateY(-240px); }
+.light:nth-child(12) { transform: rotate(330deg) translateY(-240px); }
+
+
 /* .arrow-yellow{
     width: 0px;
     height: 0px;
@@ -261,7 +364,6 @@ main {
     z-index: 5;
 } */
 
-
 /* footer */
 
 footer {
@@ -274,16 +376,67 @@ footer {
     margin-top: 50px;
     color: rgb(255, 255, 255);
     border-radius: 20px 20px 0px 0px;
-    padding-top: 16px;
-    padding-bottom: 32px;
+    padding: 30px 0;
     z-index: 1;
 }
 
 .content-footer{
-    width: 100%;
-    margin-left: auto;
+    width: 50%;
+    justify-content: center;
+    margin: 0 auto;
     box-sizing: border-box;
-    margin-right: auto;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Khoảng cách giữa các phần top, middle, bottom */
 }
 
+.footer-top p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.footer-top .company-name {
+    font-weight: 400;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.footer-middle {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px; /* Khoảng cách giữa các cột */
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Khoảng cách giữa các dòng trong một cột */
+    flex: 1; /* Để các cột có chiều rộng bằng nhau */
+}
+
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Khoảng cách giữa icon và text */
+    font-size: 14px;
+}
+
+.footer-item i {
+    font-size: 20px;
+    width: 20px; /* Đảm bảo icon chiếm không gian nhất quán */
+    text-align: center;
+}
+
+.bct-logo {
+    height: 35px;
+    margin-left: -5px; /* Căn chỉnh logo BCT */
+}
+
+.footer-bottom {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    padding-top: 20px;
+    font-size: 13px;
+}
