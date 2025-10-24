@@ -1,18 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Wheel
     const wheel = document.querySelector(".container-wheel");
     const spinBtn = document.getElementById("spin");
     const slices = document.querySelectorAll(".container-wheel-part");
 
+    // feature roll
     const sliceCount = slices.length; // Số lượng ô (8)
     const sliceAngle = 360 / sliceCount; // Góc của mỗi ô (45 độ)
     let isSpinning = false;
     let currentRotation = 0;
+
+    // Lượt quay
+    const spinCountElement = document.getElementById('spin-count');
+    const addSpinsButton = document.getElementById('add-spins-btn');
+    let currentSpins = 5;
 
     spinBtn.addEventListener("click", () => {
         // Không cho phép quay khi đang quay
         if (isSpinning) {
             return;
         }
+
+        // Kiểm tra và trừ lượt quay
+        if (currentSpins <= 0) {
+            alert("Bạn đã hết lượt quay. Vui lòng thêm lượt để tiếp tục!");
+            return;
+        }
+        currentSpins--;
+        updateSpinDisplay();
+
         isSpinning = true;
 
         // 1. Chọn một ô ngẫu nhiên để trúng thưởng THEO TỈ LỆ
@@ -22,13 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
         // - ID 4, 8 (index 3, 7): 35%
         // - ID 2, 6 (index 1, 5): 14.98%
         const prizeProbabilities = [
-            0.0001, // 0: ID 1
+            0.0005, // 0: ID 1
             0.1498, // 1: ID 2
-            0.0001, // 2: ID 3
+            0.0005, // 2: ID 3
             0.35,   // 3: ID 4
-            0.0001, // 4: ID 5
+            0.0005, // 4: ID 5
             0.1498, // 5: ID 6
-            0.0001, // 6: ID 7
+            0.0005, // 6: ID 7
             0.35,   // 7: ID 8
         ];
 
@@ -70,7 +86,28 @@ document.addEventListener("DOMContentLoaded", () => {
             const winningSlice = slices[winningSliceIndex];
             const prizeName = winningSlice.getAttribute('data-name');
             alert(`Chúc mừng! Bạn đã trúng: ${prizeName}`);
+
+            // Reset lại vòng quay để lần sau quay như mới
+            const finalRotation = totalRotation % 360; // Lấy góc cuối cùng trong khoảng 0-360
+            wheel.style.transition = 'none'; // Bỏ hiệu ứng chuyển động
+            wheel.style.transform = `rotate(${finalRotation}deg)`; // Đặt lại góc quay
+            wheel.offsetHeight; // Trick để trình duyệt áp dụng thay đổi ngay lập tức
+
             isSpinning = false;
         }, spinDuration * 1000);
     });
+
+
+    // Lượt quay
+     // Cập nhật hiển thị số lượt quay
+        function updateSpinDisplay() {
+            spinCountElement.textContent = currentSpins;
+        }
+
+        // Thêm sự kiện click cho nút "Thêm lượt"
+        addSpinsButton.addEventListener('click', function() {
+            currentSpins += 10;
+            updateSpinDisplay();
+        });
+    
 });
