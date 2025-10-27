@@ -343,40 +343,6 @@ main {
     max-width: 60px; /* Adjusted max-width */
 }
 
-/* Căn chỉnh lại góc quay của các ô để mũi tên chỉ vào giữa */
-.container-wheel .one{
-	background: #ef0012;
-	transform: translateX(-50%) rotate(-22.5deg);
-}
-.container-wheel .two{
-	background: white;
-	transform: translateX(-50%) rotate(22.5deg);
-}
-.container-wheel .three{
-	background: #ef0012;
-	transform: translateX(-50%) rotate(67.5deg); 
-}
-.container-wheel .four{
-	background: white;
-	transform: translateX(-50%) rotate(112.5deg); 
-}
-.container-wheel .five{
-	background: #ef0012;
-	transform: translateX(-50%) rotate(157.5deg); 
-}
-.container-wheel .six{
-	background: white;
-	transform: translateX(-50%) rotate(202.5deg); 
-}
-.container-wheel .seven{
-	background: #ef0012;
-	transform: translateX(-50%) rotate(247.5deg); 
-}
-.container-wheel .eight{
-	background:white;
-	transform: translateX(-50%) rotate(292.5deg); 
-}
-
 .mid{
 	height: 25px;
 	width: 25px;
@@ -631,7 +597,7 @@ footer {
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
-	font-size: 20px;
+	font-size: 18px;
 	/* font-weight: 900; */
 	border: 3px solid white;
 	/* box-shadow: 0 5px 10px gray; */
@@ -652,10 +618,10 @@ footer {
     z-index: 5;
 }
 .side-image-popup:first-of-type {
-    left: 20%; /* Adjusted to bring closer on smaller screens */
+    left: 25%; /* Adjusted to bring closer on smaller screens */
 }
 .side-image-popup:last-of-type { 
-    right: 20%; /* Adjusted to bring closer on smaller screens */
+    right: 25%; /* Adjusted to bring closer on smaller screens */
 }
 
 .popup-hidden {
@@ -810,10 +776,10 @@ footer {
     }
 
     .side-image:first-of-type {
-        left: 20%; 
+        left: 10%; 
     }
     .side-image:last-of-type {
-        right: 20%;
+        right: 10%;
     }
 
     /* popup img */
@@ -868,6 +834,6 @@ footer {
     }
 
     #popup-box .popup-prize{
-        font-size: 20px;
+        font-size: 18px;
     }
 }
