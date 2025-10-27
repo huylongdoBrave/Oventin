@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const spinBtn = document.getElementById("spin");
     const slices = document.querySelectorAll(".container-wheel-part");
 
-    //  popup
+    // popup
     const popupOverlay = document.getElementById("popup-overlay");
     const prizeNameElement = document.getElementById("popup-prize-name");
     // const closeBtn = document.getElementById("popup-close-btn");
@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const addSpinsButton = document.getElementById('add-spins-btn');
     let currentSpins = 5;
 
+    // Sự kiện quay
     spinBtn.addEventListener("click", () => {
         // Không cho phép quay khi đang quay
         if (isSpinning) {
@@ -116,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
             currentSpins += 10;
             updateSpinDisplay();
         });
-
 
     //popup 
         function closePopup() {

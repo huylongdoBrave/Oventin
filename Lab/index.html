@@ -23,7 +23,7 @@
                 <img src="./static/favicon_oven.png" alt="Oventin Logo">
             </a>
             <ul class="main-menu">
-                <li class="menu-item active">
+                <li class="menu-item ">
                     <a href="#">
                         <div class="menu-item-box">
                             <!-- <i class="fa-solid fa-dharmachakra menu-icon"></i> -->
@@ -41,7 +41,7 @@
                         </div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item active">
                     <a href="#">
                         <div class="menu-item-box">
                             <!-- <i class="fa-solid fa-gift menu-icon"></i> -->
@@ -73,57 +73,74 @@
 </header>
 
     <!-- Main Content -->
-       <h2>oventin</h2>
 <main>
-<!--             Test
-            <div style="color: black;" class="one container-wheel-part" data-id="1" data-name="Điện thoại">1</div>
-            <div style="color: black;"class="two container-wheel-part" data-id="2" data-name="Chúc bạn may mắn lần sau">2</div>
-            <div style="color: black;"class="three container-wheel-part" data-id="3" data-name="Máy ảnh">3</div>
-            <div style="color: black;"class="four container-wheel-part" data-id="4" data-name="Thẻ cào">4</div>
-            <div style="color: black;"class="five container-wheel-part" data-id="5" data-name="Điện thoại">5</div>
-            <div style="color: black;"class="six container-wheel-part" data-id="6" data-name="Chúc bạn may mắn lần sau">6</div>
-            <div style="color: black;"class="seven container-wheel-part" data-id="7" data-name="Máy ảnh">7</div>
-            <div style="color: black;"class="eight container-wheel-part" data-id="8" data-name="Thẻ cào">8</div>
-         -->
-<div class="container-wheel">
-    <div class="spinBtn">
-        <div class="wheel">
-            <div class="number" style="--i:1;--clr:#ef0012;">
-                <span>100</span>
+    <div class="game-area">
+        <div class="container-title">
+            <img src="./static/lucky-draw.png" alt="">
+        </div>
+        <div class="spin-counter">
+            <p class="title-down">Bạn còn <span id="spin-count">5</span> lượt quay</p>
+        </div>
+        <div class="add-spin-container">
+            <button id="add-spins-btn" class="btn-add">Thêm lượt</button>
+        </div>    
+        <div class="wheel-row">
+            <img src="./static/dolphine.png" alt="Dolphine" class="side-image">
+            <div class="wheel-wrapper">
+                <div class="arrow-top"></div>
+                <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+                <div class="container-wheel">
+                    <!-- json data -->
+                </div>
+                <button id="spin"><img src="./static/favicon_oven.png" alt="Spin"></button>
             </div>
-            <div class="number" style="--i:2;--clr:#ffffff;">
-                <span>1</span>
-            </div>
-            <div class="number" style="--i:3;--clr:#ef0012;">
-                <span>50</span>
-            </div>
-            <div class="number" style="--i:4;--clr:#ffffff;">
-                <span>0</span>
-            </div>
-            <div class="number" style="--i:5;--clr:#ef0012;">
-                <span>100</span>
-            </div>
-            <div class="number" style="--i:6;--clr:#ffffff;">
-                <span>1</span>
-            </div>
-            <div class="number" style="--i:7;--clr:#ef0012;">
-                <span>50</span>
-            </div>
-            <div class="number" style="--i:8;--clr:#ffffff;">
-                <span>0</span>
-            </div>
+             <img src="./static/boy.png" alt="Boy" class="side-image">
         </div>
     </div>
-</div>
-
-
+  
 </main>
+  <p class="title-down">Bấm vào Vòng Quay May Mắn để bắt đầu quay bạn nhé!</p>
+
+    <!-- Popup Result -->
+    <div id="popup-overlay" class="popup-hidden">
+        <img src="./static/dolphine.png" alt="Dolphine" class="side-image-popup">
+        <div id="popup-box">
+            <img src="./static/favicon_oven.png" alt="Oventin Logo" class="popup-logo">
+            <img src="./static/noti.png" alt="Thông báo" class="popup-title">
+            <!-- <button id="popup-close-btn" class="popup-close">&times;</button> -->
+            <p id="popup-prize-name" class="popup-prize"></p>
+            <button id="popup-confirm-btn" class="popup-confirm">Tiếp tục quay</button>
+        </div>
+        <img src="./static/boy.png" alt="Boy" class="side-image-popup">
+    </div>
 
     <!-- Footer -->
 <footer >
     <div class="container-footer">
         <div class="content-footer">
-            <p>© 2024 Oventin. All rights reserved.</p>
+            <div class="footer-top">
+                <p class="company-name">CÔNG TY TNHH AB AGRI VIỆT NAM</p>
+                <p>Tầng 6A2 Tòa nhà Viettel, 285 Cách Mạng Tháng 8, Phường 12, Quận 10, Thành phố Hồ Chí Minh, Việt Nam</p>
+            </div>
+            <div class="footer-middle">
+                <div class="footer-column">
+                    <div class="footer-item"><i class="fa-solid fa-phone"></i><span>/Ovaltine Vietnam</span></div>
+                    <div class="footer-item"><i class="fa-solid fa-envelope"></i><span>/Ovaltine Vietnam</span></div>
+                    <div class="footer-item"><i class="fa-brands fa-facebook"></i><span>Thể lệ chương trình</span></div>
+                </div>
+                <div class="footer-column">
+                    <div class="footer-item"><i class="fa-solid fa-file-contract"></i><span>/Ovaltine Vietnam</span></div>
+                    <div class="footer-item"><i class="fa-solid fa-shield-halved"></i><span>/Ovaltine Vietnam</span></div>
+                    <div class="footer-item"><i class="fa-solid fa-circle-question"></i><span>Chính sách bảo mật</span></div>
+                </div>
+                <div class="footer-column">
+                    <div class="footer-item"><i class="fa-solid fa-certificate"></i><span>/19005306</span></div>
+                    <div class="footer-item"><i class="fa-solid fa-gavel"></i><span>/Ovaltine Vietnam</span></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Ovaltine Vietnam © 2025</p>
+            </div>
         </div>
     </div>
 </footer>
