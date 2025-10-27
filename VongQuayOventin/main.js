@@ -4,7 +4,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const spinBtn = document.getElementById("spin");
     const slices = document.querySelectorAll(".container-wheel-part");
 
-    // feature roll
+    // Lấy các phần tử của popup
+    const popupOverlay = document.getElementById("popup-overlay");
+    const prizeNameElement = document.getElementById("popup-prize-name");
+    // const closeBtn = document.getElementById("popup-close-btn");
+    const confirmBtn = document.getElementById("popup-confirm-btn");
+
+
+    // Tính năng roll
     const sliceCount = slices.length; // Số lượng ô (8)
     const sliceAngle = 360 / sliceCount; // Góc của mỗi ô (45 độ)
     let isSpinning = false;
@@ -85,7 +92,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
             const winningSlice = slices[winningSliceIndex];
             const prizeName = winningSlice.getAttribute('data-name');
-            alert(`Chúc mừng! Bạn đã trúng: ${prizeName}`);
+            // Hiển thị popup
+            prizeNameElement.textContent = prizeName;
+            popupOverlay.classList.remove("popup-hidden");
 
             // Reset lại vòng quay để lần sau quay như mới
             const finalRotation = totalRotation % 360; // Lấy góc cuối cùng trong khoảng 0-360
@@ -109,5 +118,15 @@ document.addEventListener("DOMContentLoaded", () => {
             currentSpins += 10;
             updateSpinDisplay();
         });
+
+
+        //popup 
+        function closePopup() {
+        popupOverlay.classList.add("popup-hidden");
+        }
+
+        // closeBtn.addEventListener("click", closePopup);
+        confirmBtn.addEventListener("click", closePopup);
+
     
 });
