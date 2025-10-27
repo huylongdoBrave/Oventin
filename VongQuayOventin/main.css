@@ -631,7 +631,7 @@ footer {
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
-	font-size: 18px;
+	font-size: 20px;
 	/* font-weight: 900; */
 	border: 3px solid white;
 	/* box-shadow: 0 5px 10px gray; */
@@ -652,10 +652,10 @@ footer {
     z-index: 5;
 }
 .side-image-popup:first-of-type {
-    left: 15%; /* Adjusted to bring closer on smaller screens */
+    left: 20%; /* Adjusted to bring closer on smaller screens */
 }
 .side-image-popup:last-of-type { 
-    right: 15%; /* Adjusted to bring closer on smaller screens */
+    right: 20%; /* Adjusted to bring closer on smaller screens */
 }
 
 .popup-hidden {
@@ -868,6 +868,6 @@ footer {
     }
 
     #popup-box .popup-prize{
-        font-size: 18px;
+        font-size: 20px;
     }
 }
