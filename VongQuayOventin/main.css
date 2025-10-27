@@ -254,10 +254,12 @@ main {
     z-index: 5;
 }
 .side-image:first-of-type {
-    left: 20%; /* Adjusted to bring closer on smaller screens */
+    /* Position relative to the center, outside the wheel */
+    left: calc(50% - var(--wheel-wrapper-size) / 2 - 180px);
 }
 .side-image:last-of-type { 
-    right: 20%; /* Adjusted to bring closer on smaller screens */
+    /* Position relative to the center, outside the wheel */
+    right: calc(50% - var(--wheel-wrapper-size) / 2 - 180px);
 }
 .wheel-wrapper {
     width: var(--wheel-wrapper-size);
