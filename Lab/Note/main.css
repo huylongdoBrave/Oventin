@@ -652,10 +652,10 @@ footer {
     z-index: 5;
 }
 .side-image-popup:first-of-type {
-    left: 25%; /* Adjusted to bring closer on smaller screens */
+    left: 15%; /* Adjusted to bring closer on smaller screens */
 }
 .side-image-popup:last-of-type { 
-    right: 25%; /* Adjusted to bring closer on smaller screens */
+    right: 15%; /* Adjusted to bring closer on smaller screens */
 }
 
 .popup-hidden {

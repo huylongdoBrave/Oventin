@@ -776,10 +776,10 @@ footer {
     }
 
     .side-image:first-of-type {
-        left: 20%; 
+        left: 10%; 
     }
     .side-image:last-of-type {
-        right: 20%;
+        right: 10%;
     }
 
     /* popup img */

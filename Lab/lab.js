@@ -41,10 +41,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
         try {
-            // In a real app, you would fetch from an API:
+            // fetch from an API:
             // const response = await fetch('/api/prizes');
             // prizes = await response.json();
-
             // For demonstration, we use mock data. The backend would provide this.
             prizes = await getMockPrizes();
 
