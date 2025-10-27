@@ -382,24 +382,23 @@ main {
 }
 
 .arrow-top{
-	/* Mũi tên chính màu vàng */
 	height: var(--arrow-top-height);
 	width: var(--arrow-top-width);
-    background: #ffd600; /* Màu vàng */
+    background: #ffd600;
 	position: absolute;
 	clip-path: polygon(50% 100%, 0 0, 100% 0); /* Hình tam giác trỏ xuống */
-	top: var(--arrow-top-offset); /* Đẩy lên trên vòng quay một chút */
+	top: var(--arrow-top-offset); 
     z-index: 20;
 }
+
 .arrow-bottom{
-	/* Phần bóng/viền màu xám phía sau */
-	height: 65px; /* Lớn hơn mũi tên chính một chút */
+	height: 65px;
 	width: 44px;
-	background: #acacac; /* Màu xám */
+	background: #acacac; 
 	position: absolute;
 	clip-path: polygon(50% 100%, 0 0, 100% 0);
 	top: var(--arrow-top-offset);
-    z-index: 19; /* Nằm ngay sau mũi tên chính */
+    z-index: 19;
 }
 
 /* Lights around the wheel */
@@ -543,7 +542,7 @@ footer {
 
 #popup-box .popup-logo {
     position: absolute;
-    top: -190px; /* Nằm ngoài bảng, ở trên */
+    top: -190px; 
     left: 50%;
     transform: translateX(-50%);
     width: 150px;
@@ -576,7 +575,7 @@ footer {
     font-size: 1.5rem;
     font-weight: 900;
     margin: 0; /* Remove margin as flexbox will handle centering */
-    min-height: 50px; /* Đảm bảo không bị nhảy layout */
+    min-height: 50px; 
     color: #233da3;
 }
 
@@ -700,15 +699,15 @@ footer {
     }
 
     .side-image {
-        width: 120px; 
+        width: 150px; 
         margin-top: 0;
     }
 
     .side-image:first-of-type {
-        left: 15%; /* Di chuyển vào gần hơn */
+        left: 20%; 
     }
     .side-image:last-of-type {
-        right: 15%; /* Di chuyển vào gần hơn */
+        right: 20%;
     }
 
     /* popup img */
@@ -717,13 +716,12 @@ footer {
         margin-top: 80px;
     }
     .side-image-popup:first-of-type {
-        left: 1%; /* Di chuyển vào gần hơn */
+        left: 1%; 
     }
 
     .side-image-popup:last-of-type {
-        right: 1%; /* Di chuyển vào gần hơn */
+        right: 1%; 
     }
-
 
     .btn-add {
         height: 45px;

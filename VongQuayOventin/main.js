@@ -4,12 +4,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const spinBtn = document.getElementById("spin");
     const slices = document.querySelectorAll(".container-wheel-part");
 
-    // Lấy các phần tử của popup
+    //  popup
     const popupOverlay = document.getElementById("popup-overlay");
     const prizeNameElement = document.getElementById("popup-prize-name");
     // const closeBtn = document.getElementById("popup-close-btn");
     const confirmBtn = document.getElementById("popup-confirm-btn");
-
 
     // Tính năng roll
     const sliceCount = slices.length; // Số lượng ô (8)
@@ -74,13 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const randomSpins = Math.floor(Math.random() * 6) + 5;
 
         // Góc cần đến để dừng lại ở ô trúng thưởng.
-        // Mũi tên ở trên cùng (0 độ), và chúng ta quay ngược chiều kim đồng hồ.
+        // Mũi tên ở trên cùng (0 độ), quay ngược chiều kim đồng hồ.
         // Góc của ô trúng thưởng = (index * góc mỗi ô).
         const cssOffsetAngle = -22.5; // Góc lệch ban đầu từ CSS
         const targetAngle = winningSliceIndex * sliceAngle + cssOffsetAngle;
 
         // Tổng góc quay = (số vòng quay * 360) + góc dừng
-        // Dấu trừ vì chúng ta muốn quay ngược chiều kim đồng hồ để khớp với thứ tự ô
+        // Dấu trừ cho quay ngược chiều kim đồng hồ để khớp với thứ tự ô
         const totalRotation = -(randomSpins * 360 + targetAngle);
 
         // 3. Thực hiện animation quay
@@ -88,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         wheel.style.transition = `transform ${spinDuration}s cubic-bezier(0.25, 0.1, 0.25, 1)`; // ease-out
         wheel.style.transform = `rotate(${totalRotation}deg)`;
 
-        // 4. Hiển thị kết quả sau khi quay xong
+        // 4. Hiển thị kết quả 
         setTimeout(() => {
             const winningSlice = slices[winningSliceIndex];
             const prizeName = winningSlice.getAttribute('data-name');
@@ -106,9 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }, spinDuration * 1000);
     });
 
-
     // Lượt quay
-     // Cập nhật hiển thị số lượt quay
+        // Cập nhật hiển thị số lượt quay
         function updateSpinDisplay() {
             spinCountElement.textContent = currentSpins;
         }
@@ -120,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
-        //popup 
+    //popup 
         function closePopup() {
         popupOverlay.classList.add("popup-hidden");
         }
