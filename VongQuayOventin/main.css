@@ -27,7 +27,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background: radial-gradient(circle, #dbbe7a 0%, #d19439 20%, #f85a00 100%);
+    background: url('./static/coin.png'), radial-gradient(circle, #dbbe7a 0%, #d19439 20%, #f85a00 100%);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -212,6 +212,33 @@ main {
     color: #ff6702;
 }
 
+.show-probabilities-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Khoảng cách từ văn bản phía trên */
+    margin-bottom: 50px; /* Khoảng cách đến footer hoặc popup */
+}
+
+.btn-show-probabilities {
+    height: 50px;
+	width: 150px;
+	background: #ff6702;
+	font-size: 20px;
+	color: white;
+	font-weight: 900;
+	letter-spacing: 1px;
+	border: 3px solid white;
+	cursor: pointer;
+	box-shadow: 0 5px 10px gray;
+	transition: 0.2s all;
+	border-radius: 50px;
+}
+
+.btn-show-probabilities:hover {
+	background-color: #eeeeee;
+    color: #ff6702;
+}
+
 .container-title{
     display: flex;
     justify-content: center;
@@ -314,40 +341,6 @@ main {
     align-items: center;
     text-align: center;
     max-width: 60px; /* Adjusted max-width */
-}
-
-/* Căn chỉnh lại góc quay của các ô để mũi tên chỉ vào giữa */
-.container-wheel .one{
-	background: #ef0012;
-	transform: translateX(-50%) rotate(-22.5deg);
-}
-.container-wheel .two{
-	background: white;
-	transform: translateX(-50%) rotate(22.5deg);
-}
-.container-wheel .three{
-	background: #ef0012;
-	transform: translateX(-50%) rotate(67.5deg); 
-}
-.container-wheel .four{
-	background: white;
-	transform: translateX(-50%) rotate(112.5deg); 
-}
-.container-wheel .five{
-	background: #ef0012;
-	transform: translateX(-50%) rotate(157.5deg); 
-}
-.container-wheel .six{
-	background: white;
-	transform: translateX(-50%) rotate(202.5deg); 
-}
-.container-wheel .seven{
-	background: #ef0012;
-	transform: translateX(-50%) rotate(247.5deg); 
-}
-.container-wheel .eight{
-	background:white;
-	transform: translateX(-50%) rotate(292.5deg); 
 }
 
 .mid{
@@ -636,6 +629,83 @@ footer {
     opacity: 0;
 }
 
+/* --- Popup Probabilities --- */
+#probabilities-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1002;
+}
+
+#probabilities-popup-box {
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    background-color: #f85a00; /* Nền cam */
+    border: 4px solid white; /* Viền trắng */
+    border-radius: 15px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+.probabilities-title {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.popup-close {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    color: white;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.probabilities-table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.probabilities-table-row:last-child {
+    border-bottom: none;
+}
+
+.prize-name-cell {
+    flex-basis: 70%;
+    font-size: 1rem;
+}
+
+.prize-prob-cell {
+    flex-basis: 25%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.prize-prob-input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    text-align: right;
+}
+
 /* --- Responsive --- */
 /* Tablet (max-width: 900px) */
 @media (max-width: 900px) {
@@ -706,10 +776,10 @@ footer {
     }
 
     .side-image:first-of-type {
-        left: 20%; 
+        left: 10%; 
     }
     .side-image:last-of-type {
-        right: 20%;
+        right: 10%;
     }
 
     /* popup img */

@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Game State
     let prizes = [];
-    let prizeProbabilities = [];
     let slices = [];
     let sliceCount = 0;
     let sliceAngle = 0;
@@ -22,6 +21,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // --- 1. INITIALIZE THE WHEEL ---
     async function initializeWheel() {
+
+      
+    // Mock function to simulate fetching data from a backend
+    function getMockPrizes() {
+        return new Promise(resolve => {
+            const mockData = [
+                { id: 1, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
+                { id: 2, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.1498, color: "white" },
+                { id: 3, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
+                { id: 4, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.35, color: "white" },
+                { id: 5, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
+                { id: 6, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.1498, color: "white" },
+                { id: 7, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
+                { id: 8, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.35, color: "white" }
+            ];
+            resolve(mockData);
+        });
+    }
+
         try {
             // In a real app, you would fetch from an API:
             // const response = await fetch('/api/prizes');
@@ -32,6 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!prizes || prizes.length === 0) {
                 console.error("No prizes found.");
+                alert("Không có quà để hiển thị. Vui lòng thử lại sau");
                 return;
             }
 
@@ -42,11 +61,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // Clear previous wheel and build probabilities array
             wheelContainer.innerHTML = '';
-            prizeProbabilities = [];
 
             // Generate wheel slices dynamically
             prizes.forEach((prize, index) => {
-                prizeProbabilities.push(prize.probability);
 
                 const slice = document.createElement('div');
                 slice.className = 'container-wheel-part';
@@ -78,6 +95,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Update the slices NodeList
             slices = document.querySelectorAll(".container-wheel-part");
 
+            // Initialize the Rate Manager with the prize data
+            window.OventinRateManager.initialize(prizes);
+
         } catch (error) {
             console.error("Failed to initialize wheel:", error);
             alert("Không thể tải được vòng quay. Vui lòng thử lại sau.");
@@ -94,6 +114,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentSpins--;
         updateSpinDisplay();
         isSpinning = true;
+
+        // Get the latest probabilities from the manager before spinning
+        const prizeProbabilities = window.OventinRateManager.getProbabilities();
 
         const winningSliceIndex = getWeightedRandomIndex();
         const randomSpins = Math.floor(Math.random() * 6) + 5;
@@ -121,6 +144,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // --- 3. HELPER FUNCTIONS ---
     function getWeightedRandomIndex() {
+        // This function now uses the probabilities fetched right before the spin
+        const prizeProbabilities = window.OventinRateManager.getProbabilities();
         let rand = Math.random();
         for (let i = 0; i < prizeProbabilities.length; i++) {
             if (rand < prizeProbabilities[i]) return i;
@@ -137,22 +162,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         popupOverlay.classList.add("popup-hidden");
     }
 
-    // Mock function to simulate fetching data from a backend
-    function getMockPrizes() {
-        return new Promise(resolve => {
-            const mockData = [
-                { id: 1, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
-                { id: 2, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.1498, color: "white" },
-                { id: 3, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
-                { id: 4, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.35, color: "white" },
-                { id: 5, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
-                { id: 6, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.1498, color: "white" },
-                { id: 7, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
-                { id: 8, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.35, color: "white" }
-            ];
-            resolve(mockData);
-        });
-    }
 
     // --- 4. EVENT LISTENERS ---
     spinBtn.addEventListener("click", handleSpin);

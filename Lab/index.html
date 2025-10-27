@@ -101,6 +101,10 @@
 </main>
   <p class="title-down">Bấm vào Vòng Quay May Mắn để bắt đầu quay bạn nhé!</p>
 
+<div class="show-probabilities-container">
+    <button id="show-probabilities-btn" class="btn-show-probabilities">Tỉ lệ</button>
+</div>
+
     <!-- Popup Result -->
     <div id="popup-overlay" class="popup-hidden">
         <img src="./static/dolphine.png" alt="Dolphine" class="side-image-popup">
@@ -112,6 +116,18 @@
             <button id="popup-confirm-btn" class="popup-confirm">Tiếp tục quay</button>
         </div>
         <img src="./static/boy.png" alt="Boy" class="side-image-popup">
+    </div>
+
+    <!-- Popup Probabilities -->
+    <div id="probabilities-popup-overlay" class="popup-hidden">
+        <div id="probabilities-popup-box">
+            <button id="probabilities-close-btn" class="popup-close">&times;</button>
+            <h3 class="probabilities-title">Bảng Tỉ Lệ Trúng Thưởng</h3>
+            <div class="probabilities-table">
+                <div id="probabilities-table-body"></div>
+            </div>
+            <p id="probabilities-total">Tổng tỉ lệ: 100%</p>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -145,6 +161,7 @@
     </div>
 </footer>
 
+<script src="./ratetable.js"></script>
 <script src="./lab.js"></script>
 </body>
 </html>

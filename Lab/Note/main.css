@@ -343,6 +343,40 @@ main {
     max-width: 60px; /* Adjusted max-width */
 }
 
+/* Căn chỉnh lại góc quay của các ô để mũi tên chỉ vào giữa */
+.container-wheel .one{
+	background: #ef0012;
+	transform: translateX(-50%) rotate(-22.5deg);
+}
+.container-wheel .two{
+	background: white;
+	transform: translateX(-50%) rotate(22.5deg);
+}
+.container-wheel .three{
+	background: #ef0012;
+	transform: translateX(-50%) rotate(67.5deg); 
+}
+.container-wheel .four{
+	background: white;
+	transform: translateX(-50%) rotate(112.5deg); 
+}
+.container-wheel .five{
+	background: #ef0012;
+	transform: translateX(-50%) rotate(157.5deg); 
+}
+.container-wheel .six{
+	background: white;
+	transform: translateX(-50%) rotate(202.5deg); 
+}
+.container-wheel .seven{
+	background: #ef0012;
+	transform: translateX(-50%) rotate(247.5deg); 
+}
+.container-wheel .eight{
+	background:white;
+	transform: translateX(-50%) rotate(292.5deg); 
+}
+
 .mid{
 	height: 25px;
 	width: 25px;
