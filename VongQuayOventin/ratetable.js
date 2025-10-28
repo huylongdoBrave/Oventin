@@ -1,19 +1,13 @@
 // c:\Oventin\Lab\ratetable.js
 
 window.OventinRateManager = (function() {
-    let prizes = []; // Will store the full prize objects { name, probability, ... }
+    let prizes = []; // Tham chiếu đến mảng prizes từ main.js
 
-    function initialize(initialPrizes) {
-        if (!initialPrizes || initialPrizes.length === 0) {
-            console.error("RateManager: Initialization failed. No initial prizes provided.");
-            return;
-        }
-        prizes = initialPrizes;
-
-        // DOM elements
+    function initialize() { // Hàm này chỉ chạy 1 lần để gắn sự kiện cho các nút.
         const showProbabilitiesBtn = document.getElementById('show-probabilities-btn');
         const probabilitiesPopupOverlay = document.getElementById('probabilities-popup-overlay');
         const probabilitiesTableBody = document.getElementById('probabilities-table-body');
+    
         const probabilitiesCloseBtn = document.getElementById('probabilities-close-btn');
         const totalProbElement = document.getElementById('probabilities-total');
 
@@ -89,9 +83,15 @@ window.OventinRateManager = (function() {
 
     // Public interface for the module
     return {
-        initialize: initialize,
+        initialize: initialize, // Gắn sự kiện
+        updateData: function(newPrizes) {
+            // Cập nhật dữ liệu quà khi có thay đổi
+            if (newPrizes) {
+                prizes = newPrizes;
+            }
+        },
         getProbabilities: function() {
-            // Return just the array of probability numbers, which is what the spin logic needs
+            // Trả về mảng các con số tỉ lệ
             return prizes.map(p => p.probability);
         }
     };
