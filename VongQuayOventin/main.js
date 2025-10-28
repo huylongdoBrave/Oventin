@@ -109,7 +109,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         function getMockPrizes() {
             return new Promise(resolve => {
                 const mockData = [
-                    {   id: 1, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
+                    {   id: 1, 
+                        name: "Điện thoại", 
+                        type: "image", 
+                        value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", 
+                        probability: 0.0005, 
+                        color: "#ef0012" 
+                    },
                     { id: 2, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "white" },
                     { id: 3, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
                     { id: 4, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.25, color: "white" },
@@ -143,52 +149,96 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // --- 2. SPIN LOGIC ---
     function handleSpin() {
+        // Ngăn người dùng nhấn quay khi vòng quay đang trong quá trình thực hiện
         if (isSpinning) return;
+
+        // Kiểm tra xem người dùng còn lượt quay hay không
         if (currentSpins <= 0) {
             alert("Bạn đã hết lượt quay. Vui lòng thêm lượt để tiếp tục!");
             return;
         }
+
+        // Trừ 1 lượt quay của người dùng
         currentSpins--;
+        // Cập nhật lại số lượt quay hiển thị trên giao diện
         updateSpinDisplay();
+        // Đặt trạng thái vòng quay thành "đang quay"
         isSpinning = true;
 
-        // Get the latest probabilities from the manager before spinning
+        // Lấy mảng tỉ lệ trúng thưởng mới nhất từ module RateManager
         const prizeProbabilities = window.OventinRateManager.getProbabilities();
 
+        // Xác định ô quà trúng thưởng dựa trên tỉ lệ đã lấy
         const winningSliceIndex = getWeightedRandomIndex();
+        // Tạo một số vòng quay ngẫu nhiên (từ 5 đến 10 vòng) để tạo hiệu ứng hồi hộp
         const randomSpins = Math.floor(Math.random() * 6) + 5;
+        // Tính toán góc cần dừng lại. `cssOffsetAngle` là góc lệch ban đầu để mũi tên chỉ vào giữa ô đầu tiên.
         const targetAngle = winningSliceIndex * sliceAngle + cssOffsetAngle;
+        // Tính tổng góc mà vòng quay cần xoay. Dấu trừ để quay ngược chiều kim đồng hồ.
         const totalRotation = -(randomSpins * 360 + targetAngle);
+        // Thiết lập thời gian cho hiệu ứng quay (5 giây)
         const spinDuration = 5;
 
+        // Áp dụng hiệu ứng chuyển động (transition) cho vòng quay
         wheelContainer.style.transition = `transform ${spinDuration}s cubic-bezier(0.25, 0.1, 0.25, 1)`;
+        // Bắt đầu quay vòng quay đến góc đã tính toán
         wheelContainer.style.transform = `rotate(${totalRotation}deg)`;
 
+        // Đặt hẹn giờ để thực hiện các hành động sau khi vòng quay đã dừng hẳn
         setTimeout(() => {
+            // Lấy thông tin của ô quà đã trúng thưởng
             const winningSlice = slices[winningSliceIndex];
+            // Lấy tên của món quà từ thuộc tính data-name
             const prizeName = winningSlice.getAttribute('data-name');
+            // Hiển thị tên quà trúng thưởng lên popup
             prizeNameElement.textContent = prizeName;
+            // Hiển thị popup kết quả
             popupOverlay.classList.remove("popup-hidden");
 
-            const finalRotation = totalRotation % 360;
+            // Reset lại vòng quay để chuẩn bị cho lần quay tiếp theo
+            const finalRotation = totalRotation % 360; // Tính toán góc dừng cuối cùng (từ 0 đến -360 độ)
+            // Tắt hiệu ứng chuyển động để việc đặt lại góc không bị animation
             wheelContainer.style.transition = 'none';
+            // Đặt lại góc của vòng quay về góc dừng cuối cùng
             wheelContainer.style.transform = `rotate(${finalRotation}deg)`;
+            // Một "mẹo" nhỏ để trình duyệt áp dụng ngay lập tức thay đổi CSS ở trên
             wheelContainer.offsetHeight;
 
+            // Đặt lại trạng thái vòng quay thành "đã dừng"
             isSpinning = false;
         }, spinDuration * 1000);
     }
 
     // --- 3. HELPER FUNCTIONS ---
+    /*
+     * Chọn một index (vị trí) của quà một cách ngẫu nhiên, có trọng số (dựa trên tỉ lệ).
+     * Ví dụ: Nếu tỉ lệ là [0.1, 0.7, 0.2], thì quà ở index 1 có 70% cơ hội được chọn.
+     * Cách hoạt động:
+     * 1. Tạo một số ngẫu nhiên `rand` từ 0 đến 1.
+     * 2. Lặp qua mảng tỉ lệ. Ở mỗi bước, kiểm tra xem `rand` có nhỏ hơn tỉ lệ hiện tại không.
+     *    - Nếu có, trả về index hiện tại.
+     *    - Nếu không, trừ tỉ lệ đó khỏi `rand` và tiếp tục vòng lặp.
+     * Điều này tương đương với việc chia một đoạn thẳng từ 0 đến 1 thành các đoạn nhỏ có độ dài bằng tỉ lệ,
+     * và xem `rand` rơi vào đoạn nào.
+     */
     function getWeightedRandomIndex() {
-        // This function now uses the probabilities fetched right before the spin
+        // Lấy mảng tỉ lệ mới nhất từ RateManager. Ví dụ: [0.1, 0.7, 0.2]
         const prizeProbabilities = window.OventinRateManager.getProbabilities();
+        // Tạo một số ngẫu nhiên trong khoảng từ 0 (bao gồm) đến 1 (loại trừ). Ví dụ: 0.85
         let rand = Math.random();
+
+        // Lặp qua từng tỉ lệ trong mảng
         for (let i = 0; i < prizeProbabilities.length; i++) {
+            // Kiểm tra xem số ngẫu nhiên có nằm trong "khoảng" của tỉ lệ hiện tại không.
+            // Lần 1: i=0, prob=0.1. rand(0.85) < 0.1? Không. rand còn lại = 0.85 - 0.1 = 0.75
+            // Lần 2: i=1, prob=0.7. rand(0.75) < 0.7? Không. rand còn lại = 0.75 - 0.7 = 0.05
+            // Lần 3: i=2, prob=0.2. rand(0.05) < 0.2? Có. Trả về index hiện tại là 2.
             if (rand < prizeProbabilities[i]) return i;
+            // Nếu không, trừ đi tỉ lệ của ô vừa kiểm tra và tiếp tục với phần còn lại của số ngẫu nhiên.
             rand -= prizeProbabilities[i];
         }
-        return prizeProbabilities.length - 1; // Fallback
+        // Trường hợp dự phòng (ví dụ: do lỗi làm tròn số), trả về index của phần tử cuối cùng.
+        return prizeProbabilities.length - 1;
     }
 
     // NÚT XOAY
