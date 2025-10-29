@@ -45,7 +45,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
+    padding: 0;
     position: relative;
     color: var(--text-color);
 }
@@ -134,7 +134,7 @@ header {
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 25px; /* Khoảng cách giữa các mục */
+    gap: 20px; /* Khoảng cách giữa các mục */
 }
 
 .nav-right-item {
@@ -169,7 +169,6 @@ header {
 }
 
 /* --Main content-- */
-
 main {
     flex-grow: 1; /* Footer go to ending */
     padding: 0;
@@ -223,8 +222,9 @@ main {
 .btn-action {
     height: 50px;
 	width: 150px;
+    display: inline-block;
 	background: #ff6702;
-	font-size: 20px;
+	font-size: 16px;
 	color: white;
 	font-weight: 900;
 	letter-spacing: 1px;
@@ -696,12 +696,19 @@ footer {
 }
 
 .prize-name-cell {
-    flex-basis: 70%;
+    flex-basis: 50%; /* Điều chỉnh để tạo không gian cho cột màu */
     font-size: 1rem;
 }
 
+.prize-color-cell {
+    flex-basis: 20%; /* Cột mới cho input màu */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .prize-prob-cell {
-    flex-basis: 25%;
+    flex-basis: 25%; /* Điều chỉnh để tạo không gian cho cột màu */
     display: flex;
     align-items: center;
     gap: 5px;
@@ -713,6 +720,14 @@ footer {
     border-radius: 5px;
     border: 1px solid #ccc;
     text-align: right;
+}
+
+.prize-color-input {
+    width: 40px;
+    height: 30px;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* --- Popup Add Prize --- */
@@ -795,9 +810,9 @@ footer {
         background: rgb(35, 61, 163); /* Solid background */
     }
     .logo img {
-        height: 100px; /* Smaller logo */
-        margin-top: 80px;
-        margin-right: 15px;
+        height: 60px; /* Smaller logo */
+        margin-top: 10px;
+        margin-left: 5px;
     }
 
     /* --- Bottom Navigation Menu --- */
@@ -828,7 +843,7 @@ footer {
         bottom: 30px; 
         background-color: #233da3;
         border: 4px solid var(--light-blue);
-        width: var(--menu-item-size);
+        width: 70px;
         height: var(--menu-item-size);
         box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
     }
@@ -878,6 +893,23 @@ footer {
     .title-down {
         font-size: 18px;
     }
+
+    .menu-title{
+        font-size: 12px;
+    }
+}
+
+/* --- Footer Responsive --- */
+@media (max-width: 900px) {
+    .content-footer {
+        width: 90%; /* Tăng chiều rộng nội dung footer trên màn hình nhỏ */
+    }
+    .footer-middle {
+        flex-wrap: wrap; /* Cho phép các cột xuống dòng */
+    }
+    .footer-column {
+        flex-basis: calc(50% - 10px); /* Layout 2 cột, trừ đi một nửa khoảng cách gap */
+    }
 }
 
 /* Mobile (max-width: 768px) */
@@ -885,6 +917,24 @@ footer {
 
     .main-nav{
         width: 100%;
+    }
+
+    .nav-right {
+        gap: 8px; /* Giảm khoảng cách giữa các mục */
+    }
+    .nav-right-item {
+        font-size: 12px; /* Giảm kích thước chữ */
+        gap: 4px;
+    }
+    .nav-right-item i {
+        font-size: 16px; /* Giảm kích thước icon */
+    }
+    .nav-button {
+        padding: 4px 8px; /* Giảm padding của nút */
+        font-size: 12px;
+    }
+    .img-nav-right {
+        height: 30px; /* Giảm kích thước ảnh đại diện */
     }
     
     /* Adjust title image */

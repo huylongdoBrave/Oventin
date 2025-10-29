@@ -36,8 +36,8 @@
                     <a href="#">
                         <div class="menu-item-box">
                              <!-- <i class="fa-solid fa-clock-rotate-left menu-icon"></i> -->
-                              <img class="menu-icon" src="https://ovaltine-website-dev.estuary.solutions/img/menu/gift.png" alt="">
-                             <span class="menu-title">Đổi Quà</span>
+                            <img class="menu-icon" src="https://ovaltine-website-dev.estuary.solutions/img/menu/gift.png" alt="">
+                            <span class="menu-title">Đổi Quà</span>
                         </div>
                     </a>
                 </li>
@@ -89,29 +89,16 @@
             <div class="wheel-wrapper">
                 <div class="arrow-top"></div>
                 <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
-                <div class="container-wheel">
-                    <div class="one container-wheel-part" data-id="1" data-name="Điện thoại"><img src="https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38" alt="" class="image-wheel"></div>
-                    <div class="two container-wheel-part" data-id="2" data-name="Chúc bạn may mắn lần sau"><p class="p-wheel">Chúc bạn may mắn lần sau</p></div>
-                    <div class="three container-wheel-part" data-id="3" data-name="Máy ảnh"><img src="https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd" alt="" class="image-wheel"></div>
-                    <div class="four container-wheel-part" data-id="4" data-name="Thẻ cào"><img src="https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066" alt="" class="image-wheel"></div>
-                    <div class="five container-wheel-part" data-id="5" data-name="Điện thoại"><img src="https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38" alt="" class="image-wheel"></div>
-                    <div class="six container-wheel-part" data-id="6" data-name="Chúc bạn may mắn lần sau"><p class="p-wheel">Chúc bạn may mắn lần sau</p></div>
-                    <div class="seven container-wheel-part" data-id="7" data-name="Máy ảnh"><img src="https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd" alt="" class="image-wheel"></div>
-                    <div class="eight container-wheel-part" data-id="8" data-name="Thẻ cào"><img src="https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066" alt="" class="image-wheel"></div>
-                </div>
+                <div class="container-wheel"><!-- Receive Json Data --></div>
                 <button id="spin"><img src="./static/favicon_oven.png" alt="Spin"></button>
             </div>
              <img src="./static/boy.png" alt="Boy" class="side-image">
         </div>
     </div>
-  
 </main>
-<p class="title-down">Bấm vào Vòng Quay May Mắn để bắt đầu quay bạn nhé!</p>
-<div class="show-probabilities-container">
-    <button id="show-probabilities-btn" class="btn-show-probabilities">Tỉ lệ</button>
-</div>
+  <p class="title-down">Bấm vào Vòng Quay May Mắn để bắt đầu quay bạn nhé!</p>
 
-    <!-- Popup Result -->
+        <!-- POPUP KẾT QUẢ-->
     <div id="popup-overlay" class="popup-hidden">
         <img src="./static/dolphine.png" alt="Dolphine" class="side-image-popup">
         <div id="popup-box">
@@ -124,7 +111,17 @@
         <img src="./static/boy.png" alt="Boy" class="side-image-popup">
     </div>
 
-    <!-- Popup Probabilities -->
+
+        <!-- .PHẦN NÚT SETUP -->
+    <!-- Button add prize, probabilities prize -->
+    <div class="show-button-container">
+        <button id="show-probabilities-btn" class="btn-action">Tỉ lệ</button>
+        <button id="add-prize-btn" class="btn-action">Thêm quà</button>
+    </div>
+
+
+        <!-- .BẢNG TÙY CHỈNH -->
+    <!-- Popup Probabilities Table -->
     <div id="probabilities-popup-overlay" class="popup-hidden">
         <div id="probabilities-popup-box">
             <button id="probabilities-close-btn" class="popup-close">&times;</button>
@@ -133,6 +130,41 @@
                 <div id="probabilities-table-body"></div>
             </div>
             <p id="probabilities-total">Tổng tỉ lệ: 100%</p>
+            <button id="apply-probabilities-btn" type="button" class="btn-action" style="float: right;margin-top: -30px;">Áp Dụng Tỉ Lệ</button>
+        </div>
+    </div>
+
+    <!-- Popup Add Prize Table -->
+    <div id="add-prize-popup-overlay" class="popup-hidden">
+        <div id="add-prize-popup-box">
+            <button id="add-prize-close-btn" class="popup-close">&times;</button>
+            <h3 class="probabilities-title">Thêm Quà Mới</h3>
+            <form id="add-prize-form">
+                <div class="form-group">
+                    <label for="prize-name">Tên quà:</label>
+                    <input type="text" id="prize-name" name="name" required>
+                </div>
+                <!-- <div class="form-group">
+                    <label for="prize-type">Loại quà:</label>
+                    <select id="prize-type" name="type">
+                        <option value="text">Chữ (Text)</option>
+                        <option value="image">Hình ảnh (Image)</option>
+                    </select>
+                </div> -->
+                <div class="form-group" id="prize-value-group">
+                    <label for="prize-value">Giá trị (Văn bản hoặc URL hình ảnh):</label>
+                    <input type="text" id="prize-value" name="value" required placeholder="Nhập văn bản hoặc dán URL hình ảnh...">
+                </div>
+                <div class="form-group">
+                    <label for="prize-probability">Tỉ lệ (%):</label>
+                    <input type="number" id="prize-probability" name="probability" value="0" min="0" max="100" step="any" placeholder="Nhập số thực" required>
+                </div>
+                <div class="form-group">
+                    <label for="prize-color">Màu nền:</label>
+                    <input type="color" id="prize-color" name="color" value="#ffffff">
+                </div>
+                <button type="submit" class="btn-action">Lưu Quà</button>
+            </form>
         </div>
     </div>
 
@@ -168,7 +200,8 @@
     </div>
 </footer>
 
-<script src="./RateTable.js"></script>
+<script src="./ratetable.js"></script>
+<script src="./addprize.js"></script>
 <script src="./main.js"></script>
 </body>
 </html>

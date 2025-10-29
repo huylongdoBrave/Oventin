@@ -111,12 +111,14 @@
         <img src="./static/boy.png" alt="Boy" class="side-image-popup">
     </div>
 
-        <!-- .PHẦN NÚT -->
+
+        <!-- .PHẦN NÚT SETUP -->
     <!-- Button add prize, probabilities prize -->
     <div class="show-button-container">
         <button id="show-probabilities-btn" class="btn-action">Tỉ lệ</button>
         <button id="add-prize-btn" class="btn-action">Thêm quà</button>
     </div>
+
 
         <!-- .BẢNG TÙY CHỈNH -->
     <!-- Popup Probabilities Table -->
@@ -128,6 +130,7 @@
                 <div id="probabilities-table-body"></div>
             </div>
             <p id="probabilities-total">Tổng tỉ lệ: 100%</p>
+            <button id="apply-probabilities-btn" type="button" class="btn-action" style="float: right;margin-top: -30px;">Áp Dụng Tỉ Lệ</button>
         </div>
     </div>
 
@@ -153,6 +156,10 @@
                     <input type="text" id="prize-value" name="value" required placeholder="Nhập văn bản hoặc dán URL hình ảnh...">
                 </div>
                 <div class="form-group">
+                    <label for="prize-probability">Tỉ lệ (%):</label>
+                    <input type="number" id="prize-probability" name="probability" value="0" min="0" max="100" step="any" placeholder="Nhập số thực" required>
+                </div>
+                <div class="form-group">
                     <label for="prize-color">Màu nền:</label>
                     <input type="color" id="prize-color" name="color" value="#ffffff">
                 </div>
@@ -160,6 +167,7 @@
             </form>
         </div>
     </div>
+
 
     <!-- Footer -->
 <footer >

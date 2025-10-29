@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // --- 1. INITIALIZE THE WHEEL ---
     // async function initializeWheel() {
 
-    // Hàm này chỉ vẽ lại vòng quay dựa trên mảng `prizes` hiện có.
+    // vẽ lại vòng quay 
     // Và không fetch lại dữ liệu.
     function drawWheel() {
         try {
@@ -116,13 +116,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                         probability: 0.0005, 
                         color: "#ef0012" 
                     },
-                    { id: 2, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "white" },
+                    { id: 2, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "#ffffff" },
                     { id: 3, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
-                    { id: 4, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.25, color: "white" },
+                    { id: 4, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.25, color: "#ffffff" },
                     { id: 5, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
-                    { id: 6, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "white" },
+                    { id: 6, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "#ffffff" },
                     { id: 7, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
-                    { id: 8, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.25, color: "white" }
+                    { id: 8, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.25, color: "#ffffff" }
                 ];
                 resolve(mockData);
             });
@@ -131,13 +131,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             // 1. Fetch data lần đầu tiên
             prizes = await getMockPrizes();
-
             // 2. Vẽ vòng quay lần đầu
             drawWheel();
-
             // 3. Khởi tạo các module quản lý popup (chỉ chạy 1 lần)
-            window.OventinRateManager.initialize();
-            
+            window.OventinRateManager.initialize(drawWheel);
             // Bây giờ callback sẽ là hàm `drawWheel`
             window.OventinPrizeAdder.initialize(prizes, drawWheel);
 
@@ -190,9 +187,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             const winningSlice = slices[winningSliceIndex];
             // Lấy tên của món quà từ thuộc tính data-name
             const prizeName = winningSlice.getAttribute('data-name');
+            // Lấy ID của món quà từ thuộc tính data-id
+            const prizeId = winningSlice.getAttribute('data-id');
+            alert(`Chúc mừng bạn đã trúng: ${prizeName} (ID: ${prizeId})`);
             // Hiển thị tên quà trúng thưởng lên popup
             prizeNameElement.textContent = prizeName;
-            // Hiển thị popup kết quả
             popupOverlay.classList.remove("popup-hidden");
 
             // Reset lại vòng quay để chuẩn bị cho lần quay tiếp theo
@@ -222,20 +221,26 @@ document.addEventListener("DOMContentLoaded", async () => {
      * và xem `rand` rơi vào đoạn nào.
      */
     function getWeightedRandomIndex() {
-        // Lấy mảng tỉ lệ mới nhất từ RateManager. Ví dụ: [0.1, 0.7, 0.2]
+        // Lấy mảng tỉ lệ mới nhất từ RateManager. Ví dụ: [0.1, 0.7, 0.2].
         const prizeProbabilities = window.OventinRateManager.getProbabilities();
-        // Tạo một số ngẫu nhiên trong khoảng từ 0 (bao gồm) đến 1 (loại trừ). Ví dụ: 0.85
+        // Tạo một số ngẫu nhiên trong khoảng từ 0 (bao gồm) đến 1 (loại trừ).
         let rand = Math.random();
+        // Biến để theo dõi tổng tỉ lệ tích lũy.
+        let cumulativeProbability = 0;
 
-        // Lặp qua từng tỉ lệ trong mảng
+        // Lặp qua từng tỉ lệ.
         for (let i = 0; i < prizeProbabilities.length; i++) {
-            // Kiểm tra xem số ngẫu nhiên có nằm trong "khoảng" của tỉ lệ hiện tại không.
-            // Lần 1: i=0, prob=0.1. rand(0.85) < 0.1? Không. rand còn lại = 0.85 - 0.1 = 0.75
-            // Lần 2: i=1, prob=0.7. rand(0.75) < 0.7? Không. rand còn lại = 0.75 - 0.7 = 0.05
-            // Lần 3: i=2, prob=0.2. rand(0.05) < 0.2? Có. Trả về index hiện tại là 2.
-            if (rand < prizeProbabilities[i]) return i;
-            // Nếu không, trừ đi tỉ lệ của ô vừa kiểm tra và tiếp tục với phần còn lại của số ngẫu nhiên.
-            rand -= prizeProbabilities[i];
+            // Cộng tỉ lệ của ô hiện tại vào tổng tích lũy.
+            cumulativeProbability += prizeProbabilities[i];
+
+            // Nếu số ngẫu nhiên nhỏ hơn tổng tích lũy,
+            // có nghĩa là nó đã "rơi" vào khoảng của ô quà này.
+            // Ví dụ: rand=0.5, probs=[0.2, 0.4, 0.4].
+            // i=0: cumulative=0.2. 0.5 < 0.2? Không.
+            // i=1: cumulative=0.2+0.4=0.6. 0.5 < 0.6? Có. Trả về index 1.
+            if (rand < cumulativeProbability) {
+                return i;
+            }
         }
         // Trường hợp dự phòng (ví dụ: do lỗi làm tròn số), trả về index của phần tử cuối cùng.
         return prizeProbabilities.length - 1;
@@ -264,28 +269,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     initApp();
 
 });
-
-
-
-    // // Mock function to simulate fetching data from a backend
-    // function getMockPrizes() {
-    //     return new Promise(resolve => {
-    //         const mockData = [
-    //             {   id: 1,
-    //                 name: "Điện thoại",
-    //                 type: "image",
-    //                 value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", 
-    //                 probability: 0.0005, 
-    //                 color: "#ef0012" 
-    //             },
-    //             { id: 2, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.1498, color: "white" },
-    //             { id: 3, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
-    //             { id: 4, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.35, color: "white" },
-    //             { id: 5, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
-    //             { id: 6, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.1498, color: "white" },
-    //             { id: 7, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
-    //             { id: 8, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.35, color: "white" }
-    //         ];
-    //         resolve(mockData);
-    //     });
-    // }

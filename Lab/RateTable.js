@@ -96,3 +96,50 @@ window.OventinRateManager = (function() {
         }
     };
 })();
+
+
+        // function handleProbabilityChange(event) {
+        //     if (event.key === 'Enter') {
+        //         const input = event.target;
+        //         const index = parseInt(input.getAttribute('data-index'));
+        //         let newValue = parseFloat(input.value);
+
+        //         // Validation
+        //         if (isNaN(newValue) || newValue < 0) newValue = 0;
+        //         if (newValue > 100) newValue = 100;
+
+        //         // Update the probability in our local 'prizes' array
+        //         prizes[index].probability = newValue / 100;
+                
+        //         // Update the input value and the total display
+        //         input.value = newValue.toPrecision(4);
+        //         updateTotalProbability();
+        //         console.log(`Updated prize "${prizes[index].name}" probability to ${newValue}%`);
+        //     }
+        // }
+
+// probabilitiesTableBody.addEventListener('keydown', handleProbabilityChange);
+
+
+    // // Mock function to simulate fetching data from a backend
+    // function getMockPrizes() {
+    //     return new Promise(resolve => {
+    //         const mockData = [
+    //             {   id: 1,
+    //                 name: "Điện thoại",
+    //                 type: "image",
+    //                 value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", 
+    //                 probability: 0.0005, 
+    //                 color: "#ef0012" 
+    //             },
+    //             { id: 2, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.1498, color: "white" },
+    //             { id: 3, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
+    //             { id: 4, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.35, color: "white" },
+    //             { id: 5, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
+    //             { id: 6, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.1498, color: "white" },
+    //             { id: 7, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
+    //             { id: 8, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.35, color: "white" }
+    //         ];
+    //         resolve(mockData);
+    //     });
+    // }
