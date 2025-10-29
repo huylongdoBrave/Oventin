@@ -188,8 +188,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Lấy tên của món quà từ thuộc tính data-name
             const prizeName = winningSlice.getAttribute('data-name');
             // Lấy ID của món quà từ thuộc tính data-id
-            const prizeId = winningSlice.getAttribute('data-id');
-            alert(`Chúc mừng bạn đã trúng: ${prizeName} (ID: ${prizeId})`);
+            // const prizeId = winningSlice.getAttribute('data-id');
+            // alert(`Chúc mừng bạn đã trúng: ${prizeName} (ID: ${prizeId})`);
             // Hiển thị tên quà trúng thưởng lên popup
             prizeNameElement.textContent = prizeName;
             popupOverlay.classList.remove("popup-hidden");
