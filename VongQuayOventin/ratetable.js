@@ -76,7 +76,7 @@ window.OventinRateManager = (function() {
 
             // Kiểm tra tổng tỉ lệ trước khi lưu, sai số nhỏ (0.01) để tránh lỗi làm tròn số thập phân
             if (newTotalProbability > 100.01) { // Cho phép sai số nhỏ để tránh lỗi làm tròn
-                alert(`Tổng tỉ lệ không được vượt quá 100%. Tổng hiện tại của bạn là ${newTotalProbability.toFixed(2)}%. Vui lòng điều chỉnh lại.`);
+                // alert(`Tổng tỉ lệ không được vượt quá 100%. Tổng hiện tại của bạn là ${newTotalProbability.toFixed(2)}%. Vui lòng điều chỉnh lại.`);
                 return; 
             }
 

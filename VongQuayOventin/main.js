@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const confirmBtn = document.getElementById("popup-confirm-btn");
 
     // Popup thêm quà
+    const showProbabilitiesBtn = document.getElementById('show-probabilities-btn');
     const addPrizeBtn = document.getElementById('add-prize-btn');
     const addPrizePopupOverlay = document.getElementById('add-prize-popup-overlay');
     const addPrizeCloseBtn = document.getElementById('add-prize-close-btn');
@@ -161,6 +162,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateSpinDisplay();
         // Đặt trạng thái vòng quay thành "đang quay"
         isSpinning = true;
+        showProbabilitiesBtn.disabled = true;
+        addPrizeBtn.disabled = true;
+
 
         // Lấy mảng tỉ lệ trúng thưởng mới nhất từ module RateManager
         const prizeProbabilities = window.OventinRateManager.getProbabilities();
@@ -187,9 +191,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             const winningSlice = slices[winningSliceIndex];
             // Lấy tên của món quà từ thuộc tính data-name
             const prizeName = winningSlice.getAttribute('data-name');
-            // Lấy ID của món quà từ thuộc tính data-id
-            // const prizeId = winningSlice.getAttribute('data-id');
-            // alert(`Chúc mừng bạn đã trúng: ${prizeName} (ID: ${prizeId})`);
             // Hiển thị tên quà trúng thưởng lên popup
             prizeNameElement.textContent = prizeName;
             popupOverlay.classList.remove("popup-hidden");
@@ -203,6 +204,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Một "mẹo" nhỏ để trình duyệt áp dụng ngay lập tức thay đổi CSS ở trên
             wheelContainer.offsetHeight;
 
+            // Lấy ID của món quà từ thuộc tính data-id
+            // const prizeId = winningSlice.getAttribute('data-id');
+            // alert(`Chúc mừng bạn đã trúng: ${prizeName} (ID: ${prizeId})`);
+            
+            showProbabilitiesBtn.disabled = false;
+            addPrizeBtn.disabled = false;
             // Đặt lại trạng thái vòng quay thành "đã dừng"
             isSpinning = false;
         }, spinDuration * 1000);
