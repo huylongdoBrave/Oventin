@@ -69,7 +69,6 @@ window.OventinPrizeAdder = (function() {
             probability: probability / 100, // Chuyển từ % (0-100) sang dạng thập phân (0-1)
             color: color
         };
-
         // Thêm quà mới vào mảng
         prizes.push(newPrize);
 
@@ -77,10 +76,8 @@ window.OventinPrizeAdder = (function() {
         if (typeof normalizeProbabilitiesCallback === 'function') {
             normalizeProbabilitiesCallback(prizes);
         }
-
         console.log('Added new prize:', newPrize);
-        alert(`Đã thêm quà "${name}" thành công!`);
-
+        alert(`Đã thêm quà "${name}"`);
         closePopup();
 
         // Yêu cầu main.js vẽ lại vòng quay
@@ -88,7 +85,6 @@ window.OventinPrizeAdder = (function() {
             reinitializeWheelCallback();
         }
     }
-
     // Public interface
     return {
         initialize: initialize

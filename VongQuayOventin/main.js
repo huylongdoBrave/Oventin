@@ -83,14 +83,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const rotation = cssOffsetAngle + index * sliceAngle;
                 slice.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
                 slice.style.background = prize.color;
-
                 wheelContainer.appendChild(slice);
             });
 
             // Update the slices NodeList
             slices = document.querySelectorAll(".container-wheel-part");
 
-            // Tỉ lệ quà, Initialize the Rate Manager with the prize data
+            // Tỉ lệ quà
             // Chỉ cập nhật dữ liệu cho RateManager, không khởi tạo lại
             window.OventinRateManager.updateData(prizes);
         } catch (error) {

@@ -31,7 +31,7 @@ window.OventinRateManager = (function() {
             probabilitiesTableBody.innerHTML = ''; // Clear old table
             prizes.forEach((prize, index) => {
                 const currentProb = prize.probability * 100; // Convert from 0.35 -> 35
-                
+
                 const row = document.createElement('div');
                 row.className = 'probabilities-table-row';
                 row.innerHTML = `
@@ -103,7 +103,6 @@ window.OventinRateManager = (function() {
             }
         }
         
-
         // --- EVENT LISTENERS ---
         showProbabilitiesBtn.addEventListener('click', showProbabilitiesPopup);
         probabilitiesCloseBtn.addEventListener('click', closeProbabilitiesPopup);
