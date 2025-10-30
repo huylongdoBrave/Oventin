@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Popup thêm quà
     const showProbabilitiesBtn = document.getElementById('show-probabilities-btn');
     const addPrizeBtn = document.getElementById('add-prize-btn');
-    const addPrizePopupOverlay = document.getElementById('add-prize-popup-overlay');
-    const addPrizeCloseBtn = document.getElementById('add-prize-close-btn');
+    // const addPrizePopupOverlay = document.getElementById('add-prize-popup-overlay');
+    // const addPrizeCloseBtn = document.getElementById('add-prize-close-btn');
 
     // Game State
     let prizes = [];
@@ -33,10 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Và không fetch lại dữ liệu.
     function drawWheel() {
         try {
-                // fetch from an API:
-                // const response = await fetch('/api/prizes');
-                // prizes = await response.json();
-                // For demonstration, we use mock data. The backend would provide this.
             // prizes = await getMockPrizes();
 
             if (!prizes || prizes.length === 0) {
@@ -59,10 +55,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Nhân với 1.01 (tăng 1%) để bù vào lỗi làm tròn của trình duyệt, giúp các ô khít vào nhau.
             const dynamicWidth = containerWheelSize * Math.sin((sliceAngle / 2) * (Math.PI / 180)) * 1.05;
 
-
             // Generate wheel slices dynamically
             prizes.forEach((prize, index) => {
-
                 const slice = document.createElement('div');
                 slice.className = 'container-wheel-part';
                 slice.setAttribute('data-id', prize.id);
@@ -104,9 +98,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    /**
+     * Tự động điều chỉnh tỉ lệ của tất cả các phần quà để tổng luôn là 100%.
+     * Hàm này sẽ duy trì tỉ lệ tương đối giữa các phần quà.
+     * @param {Array} prizesArray - Mảng các phần quà cần chuẩn hóa.
+     */
+    function normalizeProbabilities(prizesArray) {
+        if (!prizesArray || prizesArray.length === 0) {
+            return;
+        }
+        // Gộp tất cả giá trị trong mảng thành 1
+        const totalProbability = prizesArray.reduce((sum, prize) => sum + prize.probability, 0);
+        if (totalProbability <= 0) {
+            // Nếu tổng là 0, chia đều cho tất cả
+            prizesArray.forEach(prize => prize.probability = 1 / prizesArray.length);
+        } else {
+            // Ngược lại, chia tỉ lệ theo số hiện có
+            prizesArray.forEach(prize => prize.probability = prize.probability / totalProbability);
+        }   
+    }
+
     // Hàm này chạy một lần duy nhất để lấy dữ liệu và thiết lập ứng dụng
     async function initApp() {
-        // Mock function to simulate fetching data from a backend
+
         function getMockPrizes() {
             return new Promise(resolve => {
                 const mockData = [
@@ -132,12 +146,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             // 1. Fetch data lần đầu tiên
             prizes = await getMockPrizes();
-            // 2. Vẽ vòng quay lần đầu
+            // 2. Tự động cân bằng tỉ lệ để tổng là 100%
+            normalizeProbabilities(prizes);
             drawWheel();
             // 3. Khởi tạo các module quản lý popup (chỉ chạy 1 lần)
-            window.OventinRateManager.initialize(drawWheel);
+            window.OventinRateManager.initialize(drawWheel, normalizeProbabilities);
             // Bây giờ callback sẽ là hàm `drawWheel`
-            window.OventinPrizeAdder.initialize(prizes, drawWheel);
+            window.OventinPrizeAdder.initialize(prizes, drawWheel, normalizeProbabilities);
 
         } catch (error) {
             console.error("Failed to initialize wheel:", error);
@@ -167,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         // Lấy mảng tỉ lệ trúng thưởng mới nhất từ module RateManager
-        const prizeProbabilities = window.OventinRateManager.getProbabilities();
+        // const prizeProbabilities = window.OventinRateManager.getProbabilities();
 
         // Xác định ô quà trúng thưởng dựa trên tỉ lệ đã lấy
         const winningSliceIndex = getWeightedRandomIndex();

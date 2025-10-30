@@ -195,6 +195,7 @@ main {
 	width: 150px;
 	background: #ff6702;
 	font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
 	color: white;
 	font-weight: 900;
 	letter-spacing: 1px;
@@ -222,6 +223,7 @@ main {
 .btn-action {
     height: 50px;
 	width: 150px;
+    font-family: 'Times New Roman', Times, serif;
     display: inline-block;
 	background: #ff6702;
 	font-size: 16px;
