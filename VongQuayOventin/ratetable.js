@@ -2,10 +2,10 @@
 
 window.OventinRateManager = (function() {
     let prizes = []; // Tham chiếu đến mảng prizes từ main.js
+    let tempPrizes = []; // Bản sao tạm thời của prizes để chỉnh sửa trong popup
     let reinitializeWheelCallback = () => {}; // Callback để gọi lại hàm drawWheel từ main.js
-    let normalizeProbabilitiesCallback = () => {};
 
-    function initialize(callback, normalizeCallback) { // Hàm này chỉ chạy 1 lần để gắn sự kiện cho các nút.
+    function initialize(callback) { // Hàm này chỉ chạy 1 lần để gắn sự kiện cho các nút.
         const showProbabilitiesBtn = document.getElementById('show-probabilities-btn');
         const probabilitiesPopupOverlay = document.getElementById('probabilities-popup-overlay');
         const probabilitiesTableBody = document.getElementById('probabilities-table-body');
@@ -17,19 +17,20 @@ window.OventinRateManager = (function() {
         if (typeof callback === 'function') {
             reinitializeWheelCallback = callback;
         }
-        if (typeof normalizeCallback === 'function') {
-            normalizeProbabilitiesCallback = normalizeCallback;
-        }
 
         if (!showProbabilitiesBtn || !probabilitiesPopupOverlay) {
             console.warn("RateManager: UI elements for rate table not found.");
             return;
         }
 
+
         // --- Tạo cột quà mới ---
         function showProbabilitiesPopup() {
+            // Tạo một bản sao sâu (deep copy) của mảng prizes để chỉnh sửa an toàn
+            tempPrizes = JSON.parse(JSON.stringify(prizes));
+
             probabilitiesTableBody.innerHTML = ''; // Clear old table
-            prizes.forEach((prize, index) => {
+            tempPrizes.forEach((prize, index) => {
                 const currentProb = prize.probability * 100; // Convert from 0.35 -> 35
 
                 const row = document.createElement('div');
@@ -51,50 +52,52 @@ window.OventinRateManager = (function() {
             updateTotalProbability();
             probabilitiesPopupOverlay.classList.remove('popup-hidden');
         }
-
         function closeProbabilitiesPopup() {
             probabilitiesPopupOverlay.classList.add('popup-hidden');
+            // Vì người dùng đã đóng popup mà không lưu,
+            // chúng ta cần vẽ lại vòng quay với dữ liệu gốc để hủy mọi thay đổi về màu sắc đã xem trước.
+            reinitializeWheelCallback();
         }
+
 
         // --- Cập nhật cột quà ---
         function applyAllProbabilities() {
             const inputs = probabilitiesTableBody.querySelectorAll('.prize-prob-input');
             let newTotalProbability = 0;
-            const newProbabilities = [];
             
             inputs.forEach(input => {
                 const id = parseInt(input.getAttribute('data-id'));
                 let newValue = parseFloat(input.value);
 
                 // Validation
-                if (isNaN(newValue) || newValue < 0) {newValue = 0;} 
-                if (newValue > 100) {newValue = 100;} 
+                if (isNaN(newValue) || newValue < 0) { newValue = 0; }
 
-                // // Cập nhật mảng prizes
-                // prizes[index].probability = newValue / 100;
+                // Cập nhật giá trị mới vào mảng tempPrizes
+                const prizeToUpdate = tempPrizes.find(p => p.id === id);
+                if (prizeToUpdate) { prizeToUpdate.probability = newValue / 100; }
+
                 newTotalProbability = newTotalProbability + newValue;
-                newProbabilities.push({ id: id, probability: newValue / 100 }); // Lưu giá trị đã chuyển đổi (0-1)
             });
 
-            // Nếu tổng đã hợp lệ, tiến hành cập nhật vào mảng prizes chính
-            newProbabilities.forEach(newProb => {
-                const prizeToUpdate = prizes.find(p => p.id === newProb.id);
-                if (prizeToUpdate) {prizeToUpdate.probability = newProb.probability;}
-            });
-
-            console.log('All probabilities updated.');
-            // Tự động cân bằng lại tất cả tỉ lệ sau khi người dùng áp dụng
-            if (typeof normalizeProbabilitiesCallback === 'function') {
-                normalizeProbabilitiesCallback(prizes);
+            if (newTotalProbability > 100.01) {
+                alert(`Cảnh báo tỉ lệ đang: ${newTotalProbability.toFixed(2)}%. Vui lòng chỉnh tổng  dưới 100%`);
             }
 
+            // Cập nhật dữ liệu từ bản sao tạm thời (tempPrizes) vào mảng gốc (prizes)
+            // prizes = tempPrizes không hoạt động vì nó chỉ thay đổi tham chiếu cục bộ.
+            // Chúng ta cần xóa mảng gốc và đẩy dữ liệu mới vào.
+            prizes.length = 0; // Xóa sạch mảng gốc
+            Array.prototype.push.apply(prizes, tempPrizes); // Đẩy tất cả phần tử từ tempPrizes vào
+
+            console.log('All probabilities updated.');
             alert('Đã cập nhật vòng xoay');
             closeProbabilitiesPopup();
         }
 
+
         // Tổng tỉ lệ
         function updateTotalProbability() {
-            const total = prizes.reduce((sum, prize) => sum + prize.probability, 0) * 100;
+            const total = tempPrizes.reduce((sum, prize) => sum + prize.probability, 0) * 100;
             totalProbElement.textContent = `Tổng tỉ lệ: ${total.toFixed(2)}%`;
             if (Math.abs(total - 100) > 0.01) {
                 totalProbElement.style.color = '#ffeb3b'; // Warning yellow
@@ -103,6 +106,23 @@ window.OventinRateManager = (function() {
             }
         }
         
+        // Cập nhật tổng tỉ lệ dựa trên các giá trị đang được nhập trong input
+        function updateTotalFromInputs() {
+            const inputs = probabilitiesTableBody.querySelectorAll('.prize-prob-input');
+            let total = 0;
+            inputs.forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+
+            totalProbElement.textContent = `Tổng tỉ lệ: ${total.toFixed(2)}%`;
+            if (Math.abs(total - 100) > 0.01) {
+                totalProbElement.style.color = '#ffeb3b'; // Warning yellow
+            } else {
+                totalProbElement.style.color = 'white';
+            }
+        }
+
+
         // --- EVENT LISTENERS ---
         showProbabilitiesBtn.addEventListener('click', showProbabilitiesPopup);
         probabilitiesCloseBtn.addEventListener('click', closeProbabilitiesPopup);
@@ -112,38 +132,42 @@ window.OventinRateManager = (function() {
                 reinitializeWheelCallback(); // Vẽ lại vòng quay sau khi tỉ lệ được áp dụng
             }
         }); 
+        // Sự kiện 'change' cho color input (chỉ kích hoạt khi người dùng chọn xong màu)
         probabilitiesTableBody.addEventListener('change', (event) => {
             const target = event.target;
             if (target.classList.contains('prize-color-input')) {
                 const prizeId = parseInt(target.getAttribute('data-id'));
-                const prizeToUpdate = prizes.find(p => p.id === prizeId);
-                if(prizeToUpdate){
+                const prizeToUpdate = tempPrizes.find(p => p.id === prizeId);
+                if (prizeToUpdate) {
                     prizeToUpdate.color = target.value;
-                    reinitializeWheelCallback;
+                    // Không vẽ lại vòng quay ở đây để tránh áp dụng thay đổi vào dữ liệu gốc
                 }
             }
         });
+        // Sự kiện 'input' cho probability (kích hoạt mỗi khi người dùng gõ)
+        probabilitiesTableBody.addEventListener('input', (event) => {
+            if (event.target.classList.contains('prize-prob-input')) updateTotalFromInputs();
+        });
+        // Sự kiện xóa quà
         probabilitiesTableBody.addEventListener('click', (event) => {
             const target = event.target;
             if (target.classList.contains('delete-prize-btn')) {
                 const prizeId = parseInt(target.getAttribute('data-id'));
-                const prizeToDelete = prizes.find(p => p.id === prizeId);
+                const prizeToDelete = tempPrizes.find(p => p.id === prizeId);
                 if (!prizeToDelete) return;
                 if (confirm(`Bạn có chắc chắn muốn xóa quà "${prizeToDelete.name}" không?`)) {
-                    const prizeIndex = prizes.findIndex(p => p.id === prizeId);
+                    const prizeIndex = tempPrizes.findIndex(p => p.id === prizeId);
                     if (prizeIndex > -1) {
-                        prizes.splice(prizeIndex, 1);
+                        tempPrizes.splice(prizeIndex, 1);
                     }
-                    // Tự động cân bằng lại tỉ lệ sau khi xóa
-                    if (typeof normalizeProbabilitiesCallback === 'function') {
-                        normalizeProbabilitiesCallback(prizes);
-                    }
-
-                    showProbabilitiesPopup(); // Cập nhật lại bảng
-                    reinitializeWheelCallback(); // Vẽ lại vòng quay
+                    // showProbabilitiesPopup(); // Cập nhật lại bảng
+                    // Xóa hàng trực tiếp khỏi DOM và cập nhật lại tổng
+                    target.closest('.probabilities-table-row').remove();
+                    updateTotalFromInputs();
                 }  
             }
         });
+
 
     }          
 

@@ -33,6 +33,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Và không fetch lại dữ liệu.
     function drawWheel() {
         try {
+                // fetch from an API:
+                // const response = await fetch('/api/prizes');
+                // prizes = await response.json();
+                // For demonstration, we use mock data. The backend would provide this.
             // prizes = await getMockPrizes();
 
             if (!prizes || prizes.length === 0) {
@@ -55,8 +59,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Nhân với 1.01 (tăng 1%) để bù vào lỗi làm tròn của trình duyệt, giúp các ô khít vào nhau.
             const dynamicWidth = containerWheelSize * Math.sin((sliceAngle / 2) * (Math.PI / 180)) * 1.05;
 
+
             // Generate wheel slices dynamically
             prizes.forEach((prize, index) => {
+
                 const slice = document.createElement('div');
                 slice.className = 'container-wheel-part';
                 slice.setAttribute('data-id', prize.id);
@@ -83,13 +89,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const rotation = cssOffsetAngle + index * sliceAngle;
                 slice.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
                 slice.style.background = prize.color;
+
                 wheelContainer.appendChild(slice);
             });
 
             // Update the slices NodeList
             slices = document.querySelectorAll(".container-wheel-part");
 
-            // Tỉ lệ quà
+            // Tỉ lệ quà, Initialize the Rate Manager with the prize data
             // Chỉ cập nhật dữ liệu cho RateManager, không khởi tạo lại
             window.OventinRateManager.updateData(prizes);
         } catch (error) {
@@ -97,29 +104,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    /**
-     * Tự động điều chỉnh tỉ lệ của tất cả các phần quà để tổng luôn là 100%.
-     * Hàm này sẽ duy trì tỉ lệ tương đối giữa các phần quà.
-     * @param {Array} prizesArray - Mảng các phần quà cần chuẩn hóa.
-     */
-    function normalizeProbabilities(prizesArray) {
-        if (!prizesArray || prizesArray.length === 0) {
-            return;
-        }
-        // Gộp tất cả giá trị trong mảng thành 1
-        const totalProbability = prizesArray.reduce((sum, prize) => sum + prize.probability, 0);
-        if (totalProbability <= 0) {
-            // Nếu tổng là 0, chia đều cho tất cả
-            prizesArray.forEach(prize => prize.probability = 1 / prizesArray.length);
-        } else {
-            // Ngược lại, chia tỉ lệ theo số hiện có
-            prizesArray.forEach(prize => prize.probability = prize.probability / totalProbability);
-        }   
-    }
-
     // Hàm này chạy một lần duy nhất để lấy dữ liệu và thiết lập ứng dụng
     async function initApp() {
-
+        // Mock function to simulate fetching data from a backend
         function getMockPrizes() {
             return new Promise(resolve => {
                 const mockData = [
@@ -145,13 +132,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             // 1. Fetch data lần đầu tiên
             prizes = await getMockPrizes();
-            // 2. Tự động cân bằng tỉ lệ để tổng là 100%
-            normalizeProbabilities(prizes);
+            // 2. Vẽ vòng quay lần đầu
             drawWheel();
             // 3. Khởi tạo các module quản lý popup (chỉ chạy 1 lần)
-            window.OventinRateManager.initialize(drawWheel, normalizeProbabilities);
+            window.OventinRateManager.initialize(drawWheel  );
             // Bây giờ callback sẽ là hàm `drawWheel`
-            window.OventinPrizeAdder.initialize(prizes, drawWheel, normalizeProbabilities);
+            window.OventinPrizeAdder.initialize(prizes, drawWheel);
 
         } catch (error) {
             console.error("Failed to initialize wheel:", error);
@@ -166,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Kiểm tra xem người dùng còn lượt quay hay không
         if (currentSpins <= 0) {
-            alert("Bạn đã hết lượt quay. Vui lòng thêm lượt để tiếp tục!");
+            alert("Bạn đã hết lượt quay. Vui lòng thêm lượt để tiếp tục.");
             return;
         }
 
@@ -181,7 +167,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         // Lấy mảng tỉ lệ trúng thưởng mới nhất từ module RateManager
-        // const prizeProbabilities = window.OventinRateManager.getProbabilities();
+        const prizeProbabilities = window.OventinRateManager.getProbabilities();
 
         // Xác định ô quà trúng thưởng dựa trên tỉ lệ đã lấy
         const winningSliceIndex = getWeightedRandomIndex();

@@ -3,7 +3,6 @@
 window.OventinPrizeAdder = (function() {
     let prizes = []; // Tham chiếu đến mảng prizes từ main.js
     let reinitializeWheelCallback = () => {}; // Callback để gọi lại hàm initializeWheel
-    let normalizeProbabilitiesCallback = () => {};
 
     // DOM elements
     const addPrizeBtn = document.getElementById('add-prize-btn');
@@ -11,10 +10,9 @@ window.OventinPrizeAdder = (function() {
     const closeBtn = document.getElementById('add-prize-close-btn');
     const form = document.getElementById('add-prize-form');
 
-    function initialize(prizesArray, reinitializeCallback, normalizeCallback) {
+    function initialize(prizesArray, reinitializeCallback) {
         prizes = prizesArray;
         reinitializeWheelCallback = reinitializeCallback;
-        normalizeProbabilitiesCallback = normalizeCallback;
 
         // Gắn sự kiện
         addPrizeBtn.addEventListener('click', showPopup);
@@ -52,9 +50,8 @@ window.OventinPrizeAdder = (function() {
             alert('Vui lòng điền đầy đủ thông tin quà!');
             return;
         }
-
-        // Tạo ID tự động tăng
-        // Xác thực giá trị tỉ lệ
+                                    
+        // Xác thực giá trị tỉ lệ / Tạo ID tự động tăng
         if (isNaN(probability) || probability < 0) probability = 0;
         if (probability > 100) probability = 100;
 
@@ -69,15 +66,11 @@ window.OventinPrizeAdder = (function() {
             probability: probability / 100, // Chuyển từ % (0-100) sang dạng thập phân (0-1)
             color: color
         };
+
         // Thêm quà mới vào mảng
         prizes.push(newPrize);
-
-        // Tự động cân bằng lại tất cả tỉ lệ
-        if (typeof normalizeProbabilitiesCallback === 'function') {
-            normalizeProbabilitiesCallback(prizes);
-        }
         console.log('Added new prize:', newPrize);
-        alert(`Đã thêm quà "${name}"`);
+        alert(`Đã thêm quà "${name}" thành công!`);
         closePopup();
 
         // Yêu cầu main.js vẽ lại vòng quay
@@ -85,6 +78,7 @@ window.OventinPrizeAdder = (function() {
             reinitializeWheelCallback();
         }
     }
+
     // Public interface
     return {
         initialize: initialize
