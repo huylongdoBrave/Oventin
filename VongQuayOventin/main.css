@@ -585,6 +585,14 @@ footer {
     color: #233da3;
 }
 
+#popup-prize-id {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin: 0; /* Remove margin as flexbox will handle centering */
+    min-height: 50px; 
+    color: #233da3;
+}
+
 /* #popup-box .popup-close {
     position: absolute;
     top: 5px;
@@ -697,13 +705,46 @@ footer {
     border-bottom: none;
 }
 
+.prize-id-cell {
+    flex-basis: 5%;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.prize-type-cell {
+    flex-basis: 15%;
+    font-size: 0.8rem; 
+    font-style: italic;
+    /* Thêm các thuộc tính để xử lý văn bản dài */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 5px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prize-value-image {
+    max-width: 100%;
+    max-height: 30px;
+    height: auto;
+    border-radius: 4px;
+    background-color: white;
+    padding: 2px;
+}
+
 .prize-name-cell {
-    flex-basis: 50%; /* Điều chỉnh để tạo không gian cho cột màu */
+    flex-basis: 25%;
     font-size: 1rem;
 }
 
+.probabilities-table-row.dragging {
+    opacity: 0.5;
+    background: rgba(255, 255, 255, 0.2);
+}
+
 .prize-color-cell {
-    flex-basis: 20%; /* Cột mới cho input màu */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -731,6 +772,13 @@ footer {
     border-radius: 5px;
     cursor: pointer;
 }
+/* 
+.prize-id-display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+} */
 
 /* --- Popup Add Prize --- */
 #add-prize-popup-overlay {
@@ -966,4 +1014,16 @@ footer {
     #popup-box .popup-prize{
         font-size: 18px;
     }
+    #popup-prize-id{
+        font-size: 18px;
+    }
+
+    #probabilities-popup-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+
 }

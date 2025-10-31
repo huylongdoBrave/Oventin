@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Popup trúng quà
     const popupOverlay = document.getElementById("popup-overlay");
     const prizeNameElement = document.getElementById("popup-prize-name");
+    const prizeIdElement = document.getElementById("popup-prize-id");
     const confirmBtn = document.getElementById("popup-confirm-btn");
 
     // Popup thêm quà
@@ -71,6 +72,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // Áp dụng chiều rộng động
                 slice.style.width = `${dynamicWidth}px`;
 
+                // // Thêm tên quà vào mỗi ô
+                // const nameElement = document.createElement('span');
+                // nameElement.textContent = prize.name;
+                // nameElement.className = 'prize-name-display';
+                // slice.appendChild(nameElement);
+
                 // Create content (image or text)
                 if (prize.type === 'image') {
                     const img = document.createElement('img');
@@ -84,6 +91,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                     p.className = 'p-wheel';
                     slice.appendChild(p);
                 }
+
+                // // Thêm ID của quà vào mỗi ô
+                // const idElement = document.createElement('span');
+                // idElement.textContent = `${prize.id}`;
+                // idElement.className = 'prize-id-display'; // Class để có thể tùy chỉnh CSS sau này
+                // slice.appendChild(idElement);
 
                 // Apply dynamic styles for rotation and color
                 const rotation = cssOffsetAngle + index * sliceAngle;
@@ -117,11 +130,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                         probability: 0.0005, 
                         color: "#ef0012" 
                     },
-                    { id: 2, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "#ffffff" },
+                    { id: 2, name: "Good luck", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "#ffffff" },
                     { id: 3, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
                     { id: 4, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.25, color: "#ffffff" },
                     { id: 5, name: "Điện thoại", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38", probability: 0.0005, color: "#ef0012" },
-                    { id: 6, name: "Chúc bạn may mắn lần sau", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "#ffffff" },
+                    { id: 6, name: "Good luck", type: "text", value: "Chúc bạn may mắn lần sau", probability: 0.14, color: "#ffffff" },
                     { id: 7, name: "Máy ảnh", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/3f8f5ad0-dcc1-4431-b3e7-271d3c990abd", probability: 0.0005, color: "#ef0012" },
                     { id: 8, name: "Thẻ cào", type: "image", value: "https://s3dev.estuary.solutions/ovaltine2024dev/64ac9af8-24f1-4dc2-86f6-1923cef7e066", probability: 0.25, color: "#ffffff" }
                 ];
@@ -164,7 +177,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         isSpinning = true;
         showProbabilitiesBtn.disabled = true;
         addPrizeBtn.disabled = true;
-
+        showProbabilitiesBtn.style.cursor = 'not-allowed';
+        addPrizeBtn.style.cursor = 'not-allowed';
 
         // Lấy mảng tỉ lệ trúng thưởng mới nhất từ module RateManager
         const prizeProbabilities = window.OventinRateManager.getProbabilities();
@@ -177,7 +191,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const targetAngle = winningSliceIndex * sliceAngle + cssOffsetAngle;
         // Tính tổng góc mà vòng quay cần xoay. Dấu trừ để quay ngược chiều kim đồng hồ.
         const totalRotation = -(randomSpins * 360 + targetAngle);
-        // Thiết lập thời gian cho hiệu ứng quay (5 giây)
         const spinDuration = 5;
 
         // Áp dụng hiệu ứng chuyển động (transition) cho vòng quay
@@ -191,9 +204,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             const winningSlice = slices[winningSliceIndex];
             // Lấy tên của món quà từ thuộc tính data-name
             const prizeName = winningSlice.getAttribute('data-name');
+            // Lấy ID của món quà từ thuộc tính data-id
+            const prizeId = winningSlice.getAttribute('data-id');
             // Hiển thị tên quà trúng thưởng lên popup
             prizeNameElement.textContent = prizeName;
             popupOverlay.classList.remove("popup-hidden");
+            prizeIdElement.textContent = `  _ ID: ${prizeId}`;
 
             // Reset lại vòng quay để chuẩn bị cho lần quay tiếp theo
             const finalRotation = totalRotation % 360; // Tính toán góc dừng cuối cùng (từ 0 đến -360 độ)
@@ -204,12 +220,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Một "mẹo" nhỏ để trình duyệt áp dụng ngay lập tức thay đổi CSS ở trên
             wheelContainer.offsetHeight;
 
-            // Lấy ID của món quà từ thuộc tính data-id
-            // const prizeId = winningSlice.getAttribute('data-id');
-            // alert(`Chúc mừng bạn đã trúng: ${prizeName} (ID: ${prizeId})`);
-            
             showProbabilitiesBtn.disabled = false;
             addPrizeBtn.disabled = false;
+            showProbabilitiesBtn.style.cursor = '';
+            addPrizeBtn.style.cursor = '';
             // Đặt lại trạng thái vòng quay thành "đã dừng"
             isSpinning = false;
         }, spinDuration * 1000);
