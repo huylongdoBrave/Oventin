@@ -1,0 +1,26 @@
+[
+    {
+      "name": "Siêu ĐT",
+      "type": "image",
+      "value": "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38",
+      "probability": 0.0005,
+      "color": "#ef0012",
+      "id": "5fc8"
+    },
+    {
+      "name": "Good night",
+      "type": "text",
+      "value": "Chúc bạn đi ngủ",
+      "probability": 0.14,
+      "color": "#ffffff",
+      "id": "de22"
+    },
+    {
+      "id": "69a5",
+      "name": "Siêu Laptop",
+      "type": "image",
+      "value": "https://s3dev.estuary.solutions/ovaltine2024dev/bda0db2f-f354-4a90-91c8-36ce183c4f38",
+      "probability": 0.0005,
+      "color": "#ef0012"
+    }
+  ]

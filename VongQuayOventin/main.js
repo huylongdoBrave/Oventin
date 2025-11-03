@@ -16,6 +16,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const showProbabilitiesBtn = document.getElementById('show-probabilities-btn');
     const addPrizeBtn = document.getElementById('add-prize-btn');
     const restartBtn = document.getElementById('restart-btn');
+
+    // // API Simulator elements
+    // const jsonInputArea = document.getElementById('json-input-area');
+    // const updateFromJsonBtn = document.getElementById('update-from-json-btn');
     // const addPrizePopupOverlay = document.getElementById('add-prize-popup-overlay');
     // const addPrizeCloseBtn = document.getElementById('add-prize-close-btn');
 
@@ -117,7 +121,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Hàm này chạy một lần duy nhất để lấy dữ liệu và thiết lập ứng dụng
     async function initApp() {
         const LOCAL_STORAGE_KEY = 'oventinPrizes';
-        const API_URL = '/api/prizes.json'; // URL tương đối đến file JSON
+        const API_URL = 'luckywheel.json'; // Sửa lại đường dẫn cho đúng với file bạn đã tạo
+        // const API_URL = 'http://localhost:3000/prizes'; // URL của json-server
 
         // Mock data để làm dữ liệu mặc định
         function getMockPrizes() {
@@ -149,18 +154,43 @@ document.addEventListener("DOMContentLoaded", async () => {
                 prizes = JSON.parse(savedPrizes);
                 console.log("Loaded prizes from Local Storage.");
             } else {
-                // Nếu không có, dùng mock data và lưu lại
+                // Bước 1: Luôn bắt đầu với dữ liệu gốc từ mock
                 prizes = await getMockPrizes();
+                console.log("Loaded initial data from getMockPrizes().");
                 
-                // Nếu không có, gọi API thật để lấy dữ liệu gốc
-                console.log("Fetching initial data from API...");
-                const response = await fetch(API_URL);
-                if (!response.ok) {
-                    throw new Error(`API call failed with status: ${response.status}`);
+                // Bước 2: Cố gắng lấy thêm dữ liệu từ API và gộp vào
+                try {
+                    console.log("Fetching additional data from API...");
+                    const response = await fetch(API_URL);
+                    if (response.ok) {
+                        // prizes = await response.json();
+                        let apiPrizes = await response.json();
+                        // Tìm ID lớn nhất hiện có để bắt đầu gán ID cho dữ liệu từ API
+                        let maxId = prizes.length > 0 ? Math.max(...prizes.map(p => p.id)) : 0;
+                        // Gán ID cho các phần quà từ API
+                        apiPrizes.forEach(prize => {
+                            prize.id = ++maxId;
+                        });
+
+                        prizes = prizes.concat(apiPrizes); // Gộp hai mảng dữ liệu đã có ID
+                        console.log("Successfully merged data from API.");
+                    } else {
+                        console.warn(`API call failed with status: ${response.status}. Using only mock data.`);
+                    // if (!response.ok) {
+                    //     throw new Error(`API call failed with status: ${response.status}`);
+                    }
+                } catch (apiError) {
+                    console.error("Could not fetch from API. Using only mock data.", apiError);
+                //     prizes = await response.json();
+                //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(prizes));
+                //     console.log("Fetched data from API and saved to Local Storage.");
+                // } catch (error) {
+                //     console.error("Could not fetch from API. Falling back to mock data.", error);
+                //     prizes = await getMockPrizes(); // Dùng mock data nếu API lỗi
                 }
-                prizes = await response.json();
+                // Lưu data local
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(prizes));
-                console.log("Fetched data from API and saved to Local Storage.");
+                console.log("Saved combined data to Local Storage.");
             }
             // 2. Vẽ vòng quay lần đầu
             drawWheel();
