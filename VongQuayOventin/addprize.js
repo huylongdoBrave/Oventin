@@ -13,7 +13,6 @@ window.OventinPrizeAdder = (function() {
     function initialize(prizesArray, reinitializeCallback) {
         prizes = prizesArray;
         reinitializeWheelCallback = reinitializeCallback;
-
         // Gắn sự kiện
         addPrizeBtn.addEventListener('click', showPopup);
         closeBtn.addEventListener('click', closePopup);
@@ -52,8 +51,18 @@ window.OventinPrizeAdder = (function() {
         }
                                     
         // Xác thực giá trị tỉ lệ / Tạo ID tự động tăng
-        if (isNaN(probability) || probability < 0) probability = 0;
-        if (probability > 100) probability = 100;
+        if (isNaN(probability) || probability < 0) {
+            probability = 0;
+        }
+
+        // Tính tổng tỉ lệ hiện tại (chuyển từ 0-1 sang 0-100)
+        const currentTotalProbability = prizes.reduce((sum, prize) => sum + (prize.probability * 100), 0);
+        const newTotalProbability = currentTotalProbability + probability;
+        // Kiểm tra nếu tổng mới vượt quá 100% (sử dụng sai số nhỏ để tránh lỗi làm tròn)
+        if (newTotalProbability > 100.01) {
+            alert(`Không thể thêm. Tổng tỉ lệ hiện tại là ${newTotalProbability.toFixed(2)}% đã vượt mức 100%. Vui lòng điều chỉnh lại.`);
+            return; // Dừng hàm, không cho thêm quà
+        }
 
         const newId = prizes.length > 0 ? Math.max(...prizes.map(p => p.id)) + 1 : 1;
 
@@ -69,6 +78,9 @@ window.OventinPrizeAdder = (function() {
 
         // Thêm quà mới vào mảng
         prizes.push(newPrize);
+        // Lưu lại mảng prizes đã được cập nhật vào Local Storage
+        localStorage.setItem('oventinPrizes', JSON.stringify(prizes));
+
         console.log('Added new prize:', newPrize);
         alert(`Đã thêm quà "${name}" thành công!`);
         closePopup();

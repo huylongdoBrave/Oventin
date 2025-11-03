@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Popup thêm quà
     const showProbabilitiesBtn = document.getElementById('show-probabilities-btn');
     const addPrizeBtn = document.getElementById('add-prize-btn');
+    const restartBtn = document.getElementById('restart-btn');
     // const addPrizePopupOverlay = document.getElementById('add-prize-popup-overlay');
     // const addPrizeCloseBtn = document.getElementById('add-prize-close-btn');
 
@@ -28,10 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let currentSpins = 5;
 
     // --- 1. INITIALIZE THE WHEEL ---
-    // async function initializeWheel() {
-
-    // vẽ lại vòng quay 
-    // Và không fetch lại dữ liệu.
+    // vẽ vòng quay không fetch lại dữ liệu.
     function drawWheel() {
         try {
                 // fetch from an API:
@@ -72,12 +70,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // Áp dụng chiều rộng động
                 slice.style.width = `${dynamicWidth}px`;
 
-                // // Thêm tên quà vào mỗi ô
-                // const nameElement = document.createElement('span');
-                // nameElement.textContent = prize.name;
-                // nameElement.className = 'prize-name-display';
-                // slice.appendChild(nameElement);
-
                 // Create content (image or text)
                 if (prize.type === 'image') {
                     const img = document.createElement('img');
@@ -85,6 +77,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     img.alt = prize.name;
                     img.className = 'image-wheel';
                     slice.appendChild(img);
+
+                    const namePrize = document.createElement('span');
+                    namePrize.textContent = prize.name;
+                    namePrize.className = 'prize-name-display'; // Class để style tên quà
+                    slice.appendChild(namePrize);
                 } else {
                     const p = document.createElement('p');
                     p.textContent = prize.value;
@@ -119,6 +116,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Hàm này chạy một lần duy nhất để lấy dữ liệu và thiết lập ứng dụng
     async function initApp() {
+        const LOCAL_STORAGE_KEY = 'oventinPrizes';
+
         // Mock function to simulate fetching data from a backend
         function getMockPrizes() {
             return new Promise(resolve => {
@@ -143,8 +142,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-            // 1. Fetch data lần đầu tiên
-            prizes = await getMockPrizes();
+            // 1. Kiểm tra Local Storage để tải dữ liệu
+            const savedPrizes = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (savedPrizes) {
+                prizes = JSON.parse(savedPrizes);
+                console.log("Loaded prizes from Local Storage.");
+            } else {
+                // Nếu không có, dùng mock data và lưu lại
+                prizes = await getMockPrizes();
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(prizes));
+                console.log("Used mock data and saved to Local Storage.");
+            }
             // 2. Vẽ vòng quay lần đầu
             drawWheel();
             // 3. Khởi tạo các module quản lý popup (chỉ chạy 1 lần)
@@ -177,8 +185,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         isSpinning = true;
         showProbabilitiesBtn.disabled = true;
         addPrizeBtn.disabled = true;
+        restartBtn.disabled = true;
         showProbabilitiesBtn.style.cursor = 'not-allowed';
         addPrizeBtn.style.cursor = 'not-allowed';
+        restartBtn.style.cursor = 'not-allowed';
 
         // Lấy mảng tỉ lệ trúng thưởng mới nhất từ module RateManager
         const prizeProbabilities = window.OventinRateManager.getProbabilities();
@@ -222,8 +232,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             showProbabilitiesBtn.disabled = false;
             addPrizeBtn.disabled = false;
+            restartBtn.disabled = false;
             showProbabilitiesBtn.style.cursor = '';
             addPrizeBtn.style.cursor = '';
+            restartBtn.style.cursor = '';
+
             // Đặt lại trạng thái vòng quay thành "đã dừng"
             isSpinning = false;
         }, spinDuration * 1000);
@@ -284,9 +297,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateSpinDisplay();
     });
     confirmBtn.addEventListener("click", closePopup);
+    restartBtn.addEventListener('click', () => {
+        localStorage.clear();
+        location.reload();
+    });
+    
 
     // --- START FUNCTION LUCKY PRIZE ---
-    // initializeWheel();
     initApp();
 
 });

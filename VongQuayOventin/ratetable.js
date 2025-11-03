@@ -90,6 +90,7 @@ window.OventinRateManager = (function() {
 
             if (newTotalProbability > 100.01) {
                 alert(`Cảnh báo tỉ lệ đang ${newTotalProbability.toFixed(2)}% . Vui lòng chỉnh tổng dưới 100%`);
+                return;
             }
 
             // Cập nhật dữ liệu từ bản sao tạm thời (tempPrizes) vào mảng gốc (prizes)
@@ -97,6 +98,9 @@ window.OventinRateManager = (function() {
             // Chúng ta cần xóa mảng gốc và đẩy dữ liệu mới vào.
             prizes.length = 0; // Xóa sạch mảng gốc
             Array.prototype.push.apply(prizes, tempPrizes); // Đẩy tất cả phần tử từ tempPrizes vào
+
+            // Lưu trạng thái mới vào Local Storage
+            localStorage.setItem('oventinPrizes', JSON.stringify(prizes));
 
             console.log('All probabilities updated.');
             alert('Đã cập nhật vòng xoay');
@@ -131,61 +135,77 @@ window.OventinRateManager = (function() {
             }
         }
 
-    // --- DRAG Kéo thả ---
-        let draggedItem = null;
+        // // --- DRAG Kéo thả bản cũ---
+        // let draggedItem = null;
 
-        probabilitiesTableBody.addEventListener('dragstart', (e) => {
-            draggedItem = e.target.closest('.probabilities-table-row');
-            if (!draggedItem) return;
-            // Add a class to give visual feedback
-            setTimeout(() => {
-                draggedItem.classList.add('dragging');
-            }, 0);
-        });
+        // probabilitiesTableBody.addEventListener('dragstart', (e) => {
+        //     draggedItem = e.target.closest('.probabilities-table-row');
+        //     if (!draggedItem) return;
+        //     // Add a class to give visual feedback
+        //     setTimeout(() => {
+        //         draggedItem.classList.add('dragging');
+        //     }, 0);
+        // });
 
-        probabilitiesTableBody.addEventListener('dragend', () => {
-            if (draggedItem) {
-                draggedItem.classList.remove('dragging');
-                draggedItem = null;
-            }
-        });
+        // probabilitiesTableBody.addEventListener('dragend', () => {
+        //     if (draggedItem) {
+        //         draggedItem.classList.remove('dragging');
+        //         draggedItem = null;
+        //     }
+        // });
 
-        probabilitiesTableBody.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            const afterElement = getDragAfterElement(probabilitiesTableBody, e.clientY);
-            const currentElement = document.querySelector('.dragging');
-            if (currentElement) {
-                if (afterElement == null) {
-                    probabilitiesTableBody.appendChild(currentElement);
-                } else {
-                    probabilitiesTableBody.insertBefore(currentElement, afterElement);
-                }
-            }
-        });
+        // probabilitiesTableBody.addEventListener('dragover', (e) => {
+        //     e.preventDefault();
+        //     const afterElement = getDragAfterElement(probabilitiesTableBody, e.clientY);
+        //     const currentElement = document.querySelector('.dragging');
+        //     if (currentElement) {
+        //         if (afterElement == null) {
+        //             probabilitiesTableBody.appendChild(currentElement);
+        //         } else {
+        //             probabilitiesTableBody.insertBefore(currentElement, afterElement);
+        //         }
+        //     }
+        // });
 
-        probabilitiesTableBody.addEventListener('drop', () => {
-            // Lấy thứ tự ID mới từ DOM
-            const newOrderIds = Array.from(probabilitiesTableBody.querySelectorAll('.probabilities-table-row'))
-                                     .map(row => parseInt(row.getAttribute('data-prize-id')));
+        // probabilitiesTableBody.addEventListener('drop', () => {
+        //     // Lấy thứ tự ID mới từ DOM
+        //     const newOrderIds = Array.from(probabilitiesTableBody.querySelectorAll('.probabilities-table-row'))
+        //                              .map(row => parseInt(row.getAttribute('data-prize-id')));
             
-            // Sắp xếp lại mảng tempPrizes dựa trên thứ tự mới
-            tempPrizes.sort((a, b) => newOrderIds.indexOf(a.id) - newOrderIds.indexOf(b.id));
+        //     // Sắp xếp lại mảng tempPrizes dựa trên thứ tự mới
+        //     tempPrizes.sort((a, b) => newOrderIds.indexOf(a.id) - newOrderIds.indexOf(b.id));
+        // });
+
+        // function getDragAfterElement(container, y) {
+        //     const draggableElements = [...container.querySelectorAll('.probabilities-table-row:not(.dragging)')];
+
+        //     return draggableElements.reduce((closest, child) => {
+        //         const box = child.getBoundingClientRect();
+        //         const offset = y - box.top - box.height / 2;
+        //         if (offset < 0 && offset > closest.offset) {
+        //             return { offset: offset, element: child };
+        //         } else {
+        //             return closest;
+        //         }
+        //     }, { offset: Number.NEGATIVE_INFINITY }).element;
+        // }
+
+        // --- DRAG Kéo thả (Sử dụng SortableJS) ---
+        new Sortable(probabilitiesTableBody, {
+            animation: 150, // Hiệu ứng animation khi kéo
+            ghostClass: 'dragging', // Class CSS cho "bóng ma" của item đang kéo
+            handle: '.prize-name-cell', // Chỉ cho phép kéo khi nhấn vào vùng tên quà
+            onEnd: function (evt) {
+                // Sự kiện này được gọi khi người dùng thả item ra
+                // Lấy thứ tự ID mới từ DOM sau khi đã sắp xếp
+                const newOrderIds = Array.from(evt.to.children)
+                .map(row => parseInt(row.getAttribute('data-prize-id')));
+                
+                // Sắp xếp lại mảng tempPrizes dựa trên thứ tự mới
+                tempPrizes.sort((a, b) => newOrderIds.indexOf(a.id) - newOrderIds.indexOf(b.id));
+                console.log("Update queue prize.");
+            }
         });
-
-        function getDragAfterElement(container, y) {
-            const draggableElements = [...container.querySelectorAll('.probabilities-table-row:not(.dragging)')];
-
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
-
         
         // --- EVENT LISTENERS ---
         showProbabilitiesBtn.addEventListener('click', showProbabilitiesPopup);

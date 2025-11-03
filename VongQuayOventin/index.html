@@ -96,7 +96,7 @@
         </div>
     </div>
 </main>
-  <p class="title-down">Bấm vào Vòng Quay May Mắn để bắt đầu quay bạn nhé!</p>
+  <p class="title-down">Bấm vào Vòng Quay May Mắn để bắt đầu quay</p>
 
         <!-- POPUP KẾT QUẢ-->
     <div id="popup-overlay" class="popup-hidden">
@@ -116,8 +116,13 @@
         <!-- .PHẦN NÚT SETUP -->
     <!-- Button add prize, probabilities prize -->
     <div class="show-button-container">
-        <button id="show-probabilities-btn" class="btn-action">Tỉ lệ</button>
-        <button id="add-prize-btn" class="btn-action">Thêm quà</button>
+        <div class="button-group-top"> <!-- Nhóm 1 hàng -->
+            <button id="show-probabilities-btn" class="btn-action">Tỉ lệ</button>
+            <button id="add-prize-btn" class="btn-action">Thêm quà</button>
+        </div>
+        <div class="button-group-top">
+            <button id="restart-btn" class="btn-action" style="float: left;">Khởi động lại vòng xoay</button>
+        </div>
     </div>
 
 
@@ -201,6 +206,8 @@
     </div>
 </footer>
 
+<!-- Thư viện SortableJS để hỗ trợ drag trên mobile -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script src="./ratetable.js"></script>
 <script src="./addprize.js"></script>
 <script src="./main.js"></script>
