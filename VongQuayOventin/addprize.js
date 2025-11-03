@@ -20,11 +20,13 @@ window.OventinPrizeAdder = (function() {
     }
 
     function showPopup() {
-        popupOverlay.classList.remove('popup-hidden');
+        popupOverlay.classList.remove('popup-hidden'); // Hiện popup
+        document.body.classList.add('body-no-scroll'); // Chặn cuộn
     }
 
     function closePopup() {
-        popupOverlay.classList.add('popup-hidden');
+        popupOverlay.classList.add('popup-hidden'); // Ẩn popup
+        document.body.classList.remove('body-no-scroll'); // Cho phép cuộn lại
         form.reset(); // Xóa dữ liệu đã nhập trong form
     }
 

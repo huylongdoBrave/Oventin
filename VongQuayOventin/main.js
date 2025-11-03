@@ -218,7 +218,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const prizeId = winningSlice.getAttribute('data-id');
             // Hiển thị tên quà trúng thưởng lên popup
             prizeNameElement.textContent = prizeName;
-            popupOverlay.classList.remove("popup-hidden");
+            popupOverlay.classList.remove("popup-hidden"); // Hiện popup
+            document.body.classList.add('body-no-scroll'); // Chặn cuộn
             prizeIdElement.textContent = `  _ ID: ${prizeId}`;
 
             // Reset lại vòng quay để chuẩn bị cho lần quay tiếp theo
@@ -287,7 +288,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // CLOSE POPUP
     function closePopup() {
-        popupOverlay.classList.add("popup-hidden");
+        popupOverlay.classList.add("popup-hidden"); // Ẩn popup
+        document.body.classList.remove('body-no-scroll'); // Cho phép cuộn lại
     }
 
     // --- 4. EVENT SPIN ---

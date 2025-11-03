@@ -33,6 +33,11 @@ body {
     min-height: 100vh;
 }
 
+.body-no-scroll {
+    overflow: hidden;
+}
+
+
 header {
     height: calc(var(--menu-bar-height) + var(--menu-item-size) / 2 + 5px); /* Điều chỉnh chiều cao header */
     margin-bottom: 20px;
@@ -124,6 +129,8 @@ header {
 .menu-item:hover .menu-item-box{
     background-color: #1a2b7a; 
 }
+
+
 
 /* --- Right Side Menu--- */
 
@@ -334,32 +341,29 @@ main {
 	position: absolute;
 	left: 50%;
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	align-items: center; /* Căn giữa theo chiều ngang */
+	justify-content: flex-start; /* Căn chỉnh từ đỉnh xuống */
 	flex-direction: column; /* Xếp chồng các phần tử con theo chiều dọc */
+    color:red; 
+    padding-top: 20px; /* Đẩy nội dung xuống một khoảng từ đỉnh */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước của ô */
 	font-family: monospace;
 	font-weight: 1000;
-	color:red; 
+
 }
 .image-wheel{
-    /* width: 55px; 
-    height: 55px; 
-    margin-top: -100px;  */
     width: 35%; /* Use relative width, giảm nhẹ để có không gian cho tên */
     height: auto;
-    transform: translateY(-80%); /* Push up relatively */
     align-items: center;
 }
 .p-wheel{
-    /* margin-top: -100px; */
-    /* font-size: 10px; */
-    /* max-width: 60px; */
-    transform: translateY(-100%); /* Push up relatively */
+    /* transform: translateY(-100%); */
     margin-right: 0;
     font-size: 0.9em; /* Use relative font size */
     align-items: center;
     text-align: center;
     max-width: 70%; /* Use relative max-width */
+    color: #050505;
 }
 
 /* .mid{
@@ -791,8 +795,8 @@ footer {
 } */
 
 .prize-name-display {
-    transform: translateY(-160%); /* Đẩy tên lên dưới ảnh */
-    font-size: 11px; 
+    transform: translateY(10%); /* Đẩy tên lên dưới ảnh */
+    font-size: 9px; 
     font-weight: bold;
     color: #020202;
     width: 80%; /* Giới hạn chiều rộng */
@@ -924,7 +928,13 @@ footer {
     .menu-item.active .menu-item-box,
     .menu-item:hover .menu-item-box {
         background-color:  rgb(255, 65, 9);
+        
     }
+
+    .btn-action:hover {
+	background-color: #eeeeee;
+    color: #ff6702;
+}
     
     .container-title img {
         width: 80%;
@@ -1059,6 +1069,11 @@ footer {
         align-items: center;
         flex-direction: column;
     }
+
+    .btn-action:hover {
+	background-color: #eeeeee;
+    color: #ff6702;
+}
 
 
 }

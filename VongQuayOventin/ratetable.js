@@ -60,10 +60,12 @@ window.OventinRateManager = (function() {
             });
             updateTotalProbability();
             probabilitiesPopupOverlay.classList.remove('popup-hidden');
+            document.body.classList.add('body-no-scroll'); // Chặn cuộn
         }
         function closeProbabilitiesPopup() {
             probabilitiesPopupOverlay.classList.add('popup-hidden');
             // Vì người dùng đã đóng popup mà không lưu,
+            document.body.classList.remove('body-no-scroll'); // Cho phép cuộn lại
             // chúng ta cần vẽ lại vòng quay với dữ liệu gốc để hủy mọi thay đổi về màu sắc đã xem trước.
             reinitializeWheelCallback();
         }
@@ -134,61 +136,6 @@ window.OventinRateManager = (function() {
                 totalProbElement.style.color = 'white';
             }
         }
-
-        // // --- DRAG Kéo thả bản cũ---
-        // let draggedItem = null;
-
-        // probabilitiesTableBody.addEventListener('dragstart', (e) => {
-        //     draggedItem = e.target.closest('.probabilities-table-row');
-        //     if (!draggedItem) return;
-        //     // Add a class to give visual feedback
-        //     setTimeout(() => {
-        //         draggedItem.classList.add('dragging');
-        //     }, 0);
-        // });
-
-        // probabilitiesTableBody.addEventListener('dragend', () => {
-        //     if (draggedItem) {
-        //         draggedItem.classList.remove('dragging');
-        //         draggedItem = null;
-        //     }
-        // });
-
-        // probabilitiesTableBody.addEventListener('dragover', (e) => {
-        //     e.preventDefault();
-        //     const afterElement = getDragAfterElement(probabilitiesTableBody, e.clientY);
-        //     const currentElement = document.querySelector('.dragging');
-        //     if (currentElement) {
-        //         if (afterElement == null) {
-        //             probabilitiesTableBody.appendChild(currentElement);
-        //         } else {
-        //             probabilitiesTableBody.insertBefore(currentElement, afterElement);
-        //         }
-        //     }
-        // });
-
-        // probabilitiesTableBody.addEventListener('drop', () => {
-        //     // Lấy thứ tự ID mới từ DOM
-        //     const newOrderIds = Array.from(probabilitiesTableBody.querySelectorAll('.probabilities-table-row'))
-        //                              .map(row => parseInt(row.getAttribute('data-prize-id')));
-            
-        //     // Sắp xếp lại mảng tempPrizes dựa trên thứ tự mới
-        //     tempPrizes.sort((a, b) => newOrderIds.indexOf(a.id) - newOrderIds.indexOf(b.id));
-        // });
-
-        // function getDragAfterElement(container, y) {
-        //     const draggableElements = [...container.querySelectorAll('.probabilities-table-row:not(.dragging)')];
-
-        //     return draggableElements.reduce((closest, child) => {
-        //         const box = child.getBoundingClientRect();
-        //         const offset = y - box.top - box.height / 2;
-        //         if (offset < 0 && offset > closest.offset) {
-        //             return { offset: offset, element: child };
-        //         } else {
-        //             return closest;
-        //         }
-        //     }, { offset: Number.NEGATIVE_INFINITY }).element;
-        // }
 
         // --- DRAG Kéo thả (Sử dụng SortableJS) ---
         new Sortable(probabilitiesTableBody, {
