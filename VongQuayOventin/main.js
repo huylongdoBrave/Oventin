@@ -117,8 +117,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Hàm này chạy một lần duy nhất để lấy dữ liệu và thiết lập ứng dụng
     async function initApp() {
         const LOCAL_STORAGE_KEY = 'oventinPrizes';
+        const API_URL = '/api/prizes.json'; // URL tương đối đến file JSON
 
-        // Mock function to simulate fetching data from a backend
+        // Mock data để làm dữ liệu mặc định
         function getMockPrizes() {
             return new Promise(resolve => {
                 const mockData = [
@@ -150,8 +151,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 // Nếu không có, dùng mock data và lưu lại
                 prizes = await getMockPrizes();
+                
+                // Nếu không có, gọi API thật để lấy dữ liệu gốc
+                console.log("Fetching initial data from API...");
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+                prizes = await response.json();
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(prizes));
-                console.log("Used mock data and saved to Local Storage.");
+                console.log("Fetched data from API and saved to Local Storage.");
             }
             // 2. Vẽ vòng quay lần đầu
             drawWheel();
