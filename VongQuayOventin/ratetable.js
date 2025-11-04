@@ -1,8 +1,8 @@
 // c:\Oventin\Lab\ratetable.js
 
 window.OventinRateManager = (function() {
-    let prizes = []; // Tham chiếu đến mảng prizes từ main.js
-    let tempPrizes = []; // Bản sao tạm thời của prizes để chỉnh sửa trong popup
+    let prizes = []; //  mảng prizes từ main.js
+    let tempPrizes = []; // Bản sao prize 
     let reinitializeWheelCallback = () => {}; // Callback để gọi lại hàm drawWheel từ main.js
 
     function initialize(callback) { // Hàm này chỉ chạy 1 lần để gắn sự kiện cho các nút.
@@ -22,7 +22,6 @@ window.OventinRateManager = (function() {
             console.warn("RateManager: UI elements for rate table not found.");
             return;
         }
-
 
         // --- Tạo cột quà mới ---
         function showProbabilitiesPopup() {
@@ -95,8 +94,6 @@ window.OventinRateManager = (function() {
                 return;
             }
 
-            // Cập nhật dữ liệu từ bản sao tạm thời (tempPrizes) vào mảng gốc (prizes)
-            // prizes = tempPrizes không hoạt động vì nó chỉ thay đổi tham chiếu cục bộ.
             // Chúng ta cần xóa mảng gốc và đẩy dữ liệu mới vào.
             prizes.length = 0; // Xóa sạch mảng gốc
             Array.prototype.push.apply(prizes, tempPrizes); // Đẩy tất cả phần tử từ tempPrizes vào
@@ -105,7 +102,7 @@ window.OventinRateManager = (function() {
             localStorage.setItem('oventinPrizes', JSON.stringify(prizes));
 
             console.log('All probabilities updated.');
-            alert('Đã cập nhật vòng xoay');
+            alert('Đã cập nhật thành công!');
             closeProbabilitiesPopup();
         }
 
@@ -160,7 +157,7 @@ window.OventinRateManager = (function() {
         applyProbabilitiesBtn.addEventListener('click', () => {
             applyAllProbabilities();
             if (typeof reinitializeWheelCallback === 'function') {
-                reinitializeWheelCallback(); // Vẽ lại vòng quay sau khi tỉ lệ được áp dụng
+                // reinitializeWheelCallback(); // Không cần gọi lại ở đây vì closeProbabilitiesPopup đã gọi rồi
             }
         }); 
         // Sự kiện 'change' cho color input (chỉ kích hoạt khi người dùng chọn xong màu)

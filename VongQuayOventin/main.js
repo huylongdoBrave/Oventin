@@ -120,9 +120,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Hàm này chạy một lần duy nhất để lấy dữ liệu và thiết lập ứng dụng
     async function initApp() {
+        // const API_FILE_URL = 'luckywheel.json';
         const LOCAL_STORAGE_KEY = 'oventinPrizes';
-        const API_URL = 'luckywheel.json'; // Sửa lại đường dẫn cho đúng với file bạn đã tạo
-        // const API_URL = 'http://localhost:3000/prizes'; // URL của json-server
+        // const LOCAL_STORAGE_KEY = 'oventinPrizes'; // Sẽ không dùng LocalStorage cho danh sách quà nữa
+        const API_URL = 'http://localhost:3000/prizes'; // API endpoint từ json-server
 
         // Mock data để làm dữ liệu mặc định
         function getMockPrizes() {
@@ -150,52 +151,58 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             // 1. Kiểm tra Local Storage để tải dữ liệu
             const savedPrizes = localStorage.getItem(LOCAL_STORAGE_KEY);
+            
             if (savedPrizes) {
+                // Nếu có dữ liệu trong Local Storage, sử dụng nó
                 prizes = JSON.parse(savedPrizes);
                 console.log("Loaded prizes from Local Storage.");
             } else {
-                // Bước 1: Luôn bắt đầu với dữ liệu gốc từ mock
+                // Nếu Local Storage trống, thực hiện quy trình tải lần đầu
+                console.log("Local storage is empty. Initializing data...");
+
+                // Bước 1: Luôn tải dữ liệu gốc từ getMockPrizes()
                 prizes = await getMockPrizes();
                 console.log("Loaded initial data from getMockPrizes().");
-                
-                // Bước 2: Cố gắng lấy thêm dữ liệu từ API và gộp vào
+
+                // Bước 2: Dùng GET để lấy dữ liệu từ API và gộp vào
                 try {
-                    console.log("Fetching additional data from API...");
+                    console.log(`Fetching additional data from API: ${API_URL}`);
                     const response = await fetch(API_URL);
                     if (response.ok) {
-                        // prizes = await response.json();
-                        let apiPrizes = await response.json();
-                        // Tìm ID lớn nhất hiện có để bắt đầu gán ID cho dữ liệu từ API
-                        let maxId = prizes.length > 0 ? Math.max(...prizes.map(p => p.id)) : 0;
-                        // Gán ID cho các phần quà từ API
-                        apiPrizes.forEach(prize => {
-                            prize.id = ++maxId;
-                        });
 
-                        prizes = prizes.concat(apiPrizes); // Gộp hai mảng dữ liệu đã có ID
-                        console.log("Successfully merged data from API.");
+                        const apiPrizes = await response.json();
+                        if (apiPrizes && apiPrizes.length > 0) {
+                            
+                            // Tìm ID lớn nhất hiện có để bắt đầu gán ID cho dữ liệu từ API
+                            let maxId = prizes.length > 0 ? Math.max(...prizes.map(p => p.id)) : 0;
+                            // Gán ID cho các phần quà từ API
+                            apiPrizes.forEach(prize => {
+                                prize.id = ++maxId;
+                            });
+                            // Gộp dữ liệu từ API vào mảng prizes và json-server tự quản lý add ID
+                            prizes = prizes.concat(apiPrizes);
+                            console.log(`Successfully merged ${apiPrizes.length} prize(s) from API.`);
+                        } else {
+                            console.log("API returned no new prizes. Using only mock data.");
+                        }
                     } else {
                         console.warn(`API call failed with status: ${response.status}. Using only mock data.`);
-                    // if (!response.ok) {
-                    //     throw new Error(`API call failed with status: ${response.status}`);
                     }
                 } catch (apiError) {
-                    console.error("Could not fetch from API. Using only mock data.", apiError);
                 //     prizes = await response.json();
                 //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(prizes));
-                //     console.log("Fetched data from API and saved to Local Storage.");
-                // } catch (error) {
-                //     console.error("Could not fetch from API. Falling back to mock data.", error);
-                //     prizes = await getMockPrizes(); // Dùng mock data nếu API lỗi
+                    console.error("Could not fetch from API. Using only mock data.", apiError);
                 }
-                // Lưu data local
+
+                // Bước 3: Lưu dữ liệu đã gộp vào Local Storage
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(prizes));
                 console.log("Saved combined data to Local Storage.");
             }
+
             // 2. Vẽ vòng quay lần đầu
             drawWheel();
             // 3. Khởi tạo các module quản lý popup (chỉ chạy 1 lần)
-            window.OventinRateManager.initialize(drawWheel  );
+            window.OventinRateManager.initialize(drawWheel);
             // Bây giờ callback sẽ là hàm `drawWheel`
             window.OventinPrizeAdder.initialize(prizes, drawWheel);
 
@@ -204,6 +211,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert("Không thể tải được vòng quay. Vui lòng thử lại sau.");
         }
     }
+
+    restartBtn.addEventListener('click', () => {
+        localStorage.clear(); 
+        location.reload();
+    });
 
     // --- 2. SPIN LOGIC ---
     function handleSpin() {
@@ -338,12 +350,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateSpinDisplay();
     });
     confirmBtn.addEventListener("click", closePopup);
-    restartBtn.addEventListener('click', () => {
-        localStorage.clear();
-        location.reload();
-    });
     
-
     // --- START FUNCTION LUCKY PRIZE ---
     initApp();
 

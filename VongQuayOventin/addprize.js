@@ -84,7 +84,7 @@ window.OventinPrizeAdder = (function() {
         localStorage.setItem('oventinPrizes', JSON.stringify(prizes));
 
         console.log('Added new prize:', newPrize);
-        alert(`Đã thêm quà "${name}" thành công!`);
+        alert(`Đã thêm quà "${name}" vào vòng quay!`);
         closePopup();
 
         // Yêu cầu main.js vẽ lại vòng quay
