@@ -2,9 +2,9 @@
 1. tạo file json với định dạng đối tượng 
 {
   "prizes": [{
-    "name": "Quà mới từ Postman",
+    "name": "Laptop gaming",
     "type": "text",
-    "value": "Tuyệt vời!",
+    "value": "Laptop gaming pro",
     "probability": 0.1,
     "color": "#9c27b0"
 }]
