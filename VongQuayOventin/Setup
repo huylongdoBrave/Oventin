@@ -12,24 +12,28 @@
 
 2. cd c:\Oventin\VongQuayOventin
 json-server --watch luckywheel.json
+ctrl + c để thoát
+Api Workflow:
+-> Luôn gọi getMockPrizes() để lấy dữ liệu cơ bản.
+-> Thực hiện fetch đến API. Nếu thành công, dữ liệu từ API sẽ được concat (gộp) vào mảng prizes đã có. 
+ID gán ngẫu nhiên vào prize trong file json và ID tự động cập nhật tăng sau khi gộp vào mảng prizes
+-> Lưu mảng dữ liệu đã được gộp vào Local Storage.
 
 3. 
-Bước 1: Luôn gọi getMockPrizes() để lấy dữ liệu cơ bản.
-Bước 2: Thực hiện fetch đến API. Nếu thành công, dữ liệu từ API sẽ được concat (gộp) vào mảng prizes đã có. Vì json-server tự động quản lý id, chúng ta không cần phải gán ID thủ công nữa.
-Bước 3: Lưu mảng dữ liệu đã được gộp vào Local Storage.
-
-4. 
 Mở Postman, tạo một request mới.
-Chọn phương thức: POST.
+-Phương thức POST
 Nhập URL: http://localhost:3000/prizes.
 Chuyển sang tab Body, chọn raw và định dạng JSON.
-Dán vào nội dung quà mới. json-server sẽ tự tạo id.
-Nhấn Send. sẽ thấy db.json được cập nhật và Terminal đang chạy json-server cũng ghi nhận yêu cầu POST.
+Nhập prize mới. json-server sẽ tự tạo id random.
+Nhấn Send và luckywheel.json được cập nhật và Terminal đang chạy json-server cũng ghi nhận yêu cầu POST.
+-Phương thức GET
+Nhập URL: http://localhost:3000/prizes.
+Dữ liệu từ file luckywheel hiển thị
 
-5. dùng Postman POST một hoặc nhiều quà mới vào http://localhost:3000/prizes.
+4. 
+Kiểm tra prize được thêm từ postman
+Vào http://localhost:3000/prizes.
 Mở ứng dụng web .
 Xóa Local Storage (F12 -> Application -> Local Storage -> Clear) để kích hoạt logic tải dữ liệu lần đầu.
-Tải lại trang.
+f5.
 Kết quả: Ứng dụng sẽ hiển thị vòng quay chứa cả 8 quà gốc từ getMockPrizes() và các quà vừa thêm từ Postman.
-
-/getMockPrizes
