@@ -195,6 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
                 // Bước 3: Lưu dữ liệu đã gộp vào Local Storage
+                // stringify chuyển dạng json sang chuỗi để localstorage có thể lưu và lcstorage ko thể lưu object và array
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(prizes));
                 console.log("Saved combined data to Local Storage.");
             }

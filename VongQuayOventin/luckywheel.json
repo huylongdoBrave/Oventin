@@ -7,14 +7,6 @@
       "probability": 0.0005,
       "color": "#ffebba",
       "id": "402f"
-    },
-    {
-      "id": "5f2d",
-      "name": "Midas",
-      "type": "text",
-      "value": "Midas",
-      "probability": 0.1,
-      "color": "#9c27b0"
     }
   ]
 }
